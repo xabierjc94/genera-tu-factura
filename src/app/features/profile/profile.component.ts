@@ -22,12 +22,12 @@ import { Profile } from '../../shared/models/user.model';
       <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="form-card">
         <div class="profile-header">
           <div class="profile-logo-container">
-            <img *ngIf="logoPreview || profile?.logo_url; else defaultAvatar"
-                 [src]="logoPreview || profile?.logo_url"
-                 class="profile-logo" alt="Logo" />
-            <ng-template #defaultAvatar>
+            @if (logoPreview || profile?.logo_url) {
+              <img [src]="logoPreview || profile?.logo_url"
+                   class="profile-logo" alt="Logo" />
+            } @else {
               <div class="profile-avatar">{{ (profile?.company_name || 'E')[0] }}</div>
-            </ng-template>
+            }
             <label class="logo-upload-btn">
               <input #fileInput type="file" accept="image/*" (change)="onLogoSelected($event)" class="hidden" />
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -81,12 +81,19 @@ import { Profile } from '../../shared/models/user.model';
 
         <div class="form-actions">
           <button type="submit" class="btn-primary" [disabled]="profileForm.invalid || loading">
-            <span *ngIf="!loading">Guardar Cambios</span>
-            <span *ngIf="loading" class="spinner"></span>
+            @if (!loading) {
+              Guardar Cambios
+            } @else {
+              <span class="spinner"></span>
+            }
           </button>
         </div>
-        <div class="success-message" *ngIf="success">¡Perfil actualizado correctamente!</div>
-        <div class="error-message" *ngIf="error">{{ error }}</div>
+        @if (success) {
+          <div class="success-message">¡Perfil actualizado correctamente!</div>
+        }
+        @if (error) {
+          <div class="error-message">{{ error }}</div>
+        }
       </form>
     </div>
   `,

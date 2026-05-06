@@ -30,7 +30,9 @@ import { Client } from '../../../shared/models/client.model';
               <label>Cliente *</label>
               <select formControlName="client_id">
                 <option value="">Seleccionar cliente...</option>
-                <option *ngFor="let client of clients" [value]="client.id">{{ client.name }}</option>
+                @for (client of clients; track client.id) {
+                  <option [value]="client.id">{{ client.name }}</option>
+                }
               </select>
             </div>
             <div class="form-group">
@@ -47,7 +49,7 @@ import { Client } from '../../../shared/models/client.model';
             </div>
             <div class="form-group">
               <label>IVA (%)</label>
-              <input type="number" formControlName="tax_rate" (ngModelChange)="calculateTotals()" />
+              <input type="number" formControlName="tax_rate" (input)="calculateTotals()" />
             </div>
             <div class="form-group">
               <label>Estado</label>
@@ -73,30 +75,32 @@ import { Client } from '../../../shared/models/client.model';
             </button>
           </div>
           <div formArrayName="items">
-            <div *ngFor="let item of items.controls; let i=index" [formGroupName]="i" class="item-row">
-              <div class="item-desc">
-                <label>Descripción</label>
-                <input type="text" formControlName="description" placeholder="Descripción del servicio/producto" />
+            @for (item of items.controls; track item; let i = $index) {
+              <div [formGroupName]="i" class="item-row">
+                <div class="item-desc">
+                  <label>Descripción</label>
+                  <input type="text" formControlName="description" placeholder="Descripción del servicio/producto" />
+                </div>
+                <div class="item-qty">
+                  <label>Cantidad</label>
+                  <input type="number" formControlName="quantity" (input)="calculateTotals()" />
+                </div>
+                <div class="item-price">
+                  <label>Precio Unit.</label>
+                  <input type="number" formControlName="unit_price" (input)="calculateTotals()" />
+                </div>
+                <div class="item-total">
+                  <label>Total</label>
+                  <input type="number" formControlName="total" readonly />
+                </div>
+                <button type="button" class="btn-remove" (click)="removeItem(i)" title="Eliminar">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
               </div>
-              <div class="item-qty">
-                <label>Cantidad</label>
-                <input type="number" formControlName="quantity" (ngModelChange)="calculateTotals()" />
-              </div>
-              <div class="item-price">
-                <label>Precio Unit.</label>
-                <input type="number" formControlName="unit_price" (ngModelChange)="calculateTotals()" />
-              </div>
-              <div class="item-total">
-                <label>Total</label>
-                <input type="number" formControlName="total" readonly />
-              </div>
-              <button type="button" class="btn-remove" (click)="removeItem(i)" title="Eliminar">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
-            </div>
+            }
           </div>
         </div>
 
@@ -118,11 +122,16 @@ import { Client } from '../../../shared/models/client.model';
         <div class="form-actions">
           <button type="button" class="btn-secondary" routerLink="/invoices">Cancelar</button>
           <button type="submit" class="btn-primary" [disabled]="invoiceForm.invalid || loading">
-            <span *ngIf="!loading">{{ isEdit ? 'Actualizar' : 'Guardar' }} Factura</span>
-            <span *ngIf="loading" class="spinner"></span>
+            @if (!loading) {
+              {{ isEdit ? 'Actualizar' : 'Guardar' }} Factura
+            } @else {
+              <span class="spinner"></span>
+            }
           </button>
         </div>
-        <div class="error-message" *ngIf="error">{{ error }}</div>
+        @if (error) {
+          <div class="error-message">{{ error }}</div>
+        }
       </form>
     </div>
   `,

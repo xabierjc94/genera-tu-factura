@@ -51,11 +51,16 @@ import { Client } from '../../../shared/models/client.model';
         <div class="form-actions">
           <button type="button" class="btn-secondary" routerLink="/clients">Cancelar</button>
           <button type="submit" class="btn-primary" [disabled]="clientForm.invalid || loading">
-            <span *ngIf="!loading">{{ isEdit ? 'Actualizar' : 'Guardar' }} Cliente</span>
-            <span *ngIf="loading" class="spinner"></span>
+            @if (!loading) {
+              {{ isEdit ? 'Actualizar' : 'Guardar' }} Cliente
+            } @else {
+              <span class="spinner"></span>
+            }
           </button>
         </div>
-        <div class="error-message" *ngIf="error">{{ error }}</div>
+        @if (error) {
+          <div class="error-message">{{ error }}</div>
+        }
       </form>
     </div>
   `,
