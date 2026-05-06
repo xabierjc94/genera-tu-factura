@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -241,7 +241,8 @@ export class DashboardComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private invoiceService: InvoiceService,
-    private clientService: ClientService
+    private clientService: ClientService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
@@ -259,6 +260,8 @@ export class DashboardComponent implements OnInit {
       this.clientCount = clients.length;
     } catch (error) {
       this.router.navigate(['/auth/login']);
+    } finally {
+      this.cdr.detectChanges();
     }
   }
 }

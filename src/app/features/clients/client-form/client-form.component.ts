@@ -158,12 +158,12 @@ export class ClientFormComponent implements OnInit {
     this.loading = true;
     this.error = '';
     try {
-      const user = await this.authService.getUser();
-      if (!user) throw new Error('No user logged in');
+      const { data: { session } } = await this.authService.getSession();
+      if (!session?.user) throw new Error('Sesión expirada. Por favor, inicia sesión de nuevo.');
 
       const clientData = {
         ...this.clientForm.value,
-        user_id: user.id
+        user_id: session.user.id
       };
 
       if (this.isEdit && this.clientId) {
@@ -173,7 +173,7 @@ export class ClientFormComponent implements OnInit {
       }
       this.router.navigate(['/clients']);
     } catch (err: any) {
-      this.error = err.message || 'Error al guardar el cliente';
+      this.error = err.message || err.details || 'Error al guardar el cliente';
     } finally {
       this.loading = false;
     }

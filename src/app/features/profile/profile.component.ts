@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -80,7 +80,7 @@ import { Profile } from '../../shared/models/user.model';
         </div>
 
         <div class="form-actions">
-          <button type="submit" class="btn-primary" [disabled]="profileForm.invalid || loading">
+          <button type="submit" class="btn-primary" [disabled]="profileForm.invalid || !profileForm.dirty || loading">
             @if (!loading) {
               Guardar Cambios
             } @else {
@@ -183,7 +183,8 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {
     this.profileForm = this.fb.group({
       company_name: ['', Validators.required],
@@ -203,10 +204,19 @@ export class ProfileComponent implements OnInit {
     try {
       this.profile = await this.authService.getProfile();
       if (this.profile) {
-        this.profileForm.patchValue(this.profile);
+        this.profileForm.patchValue({
+          company_name: this.profile.company_name || '',
+          cif_nif: this.profile.cif_nif || '',
+          address: this.profile.address || '',
+          province: this.profile.province || '',
+          phone: this.profile.phone || '',
+          email: this.profile.email || ''
+        });
       }
     } catch (err: any) {
       this.error = 'Error al cargar el perfil';
+    } finally {
+      this.cdr.detectChanges();
     }
   }
 
@@ -251,6 +261,7 @@ export class ProfileComponent implements OnInit {
       this.profile = await this.authService.getProfile();
       this.logoPreview = null;
       this.selectedLogo = null;
+      this.profileForm.markAsPristine();
       this.success = true;
       
       setTimeout(() => this.success = false, 3000);

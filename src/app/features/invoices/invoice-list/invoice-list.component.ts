@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
@@ -196,7 +196,8 @@ export class InvoiceListComponent implements OnInit {
   constructor(
     private invoiceService: InvoiceService,
     private clientService: ClientService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
@@ -209,6 +210,8 @@ export class InvoiceListComponent implements OnInit {
       this.filteredInvoices = this.invoices;
     } catch (error) {
       console.error('Error loading invoices:', error);
+    } finally {
+      this.cdr.detectChanges();
     }
   }
 

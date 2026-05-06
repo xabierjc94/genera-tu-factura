@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
@@ -226,7 +226,8 @@ export class InvoiceFormComponent implements OnInit {
     private clientService: ClientService,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {
     this.items = this.fb.array([]);
     this.invoiceForm = this.fb.group({
@@ -259,6 +260,8 @@ export class InvoiceFormComponent implements OnInit {
       this.clients = await this.clientService.getClients();
     } catch (error) {
       console.error('Error loading clients:', error);
+    } finally {
+      this.cdr.detectChanges();
     }
   }
 
@@ -290,6 +293,8 @@ export class InvoiceFormComponent implements OnInit {
       }
     } catch (error) {
       this.error = 'Error al cargar la factura';
+    } finally {
+      this.cdr.detectChanges();
     }
   }
 

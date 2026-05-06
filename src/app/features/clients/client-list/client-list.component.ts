@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
@@ -27,6 +27,10 @@ import { Client } from '../../../shared/models/client.model';
           </button>
         </div>
       </div>
+
+      @if (loadError) {
+        <div class="error-message">{{ loadError }}</div>
+      }
 
       <div class="filters">
         <div class="search-box">
@@ -150,6 +154,9 @@ import { Client } from '../../../shared/models/client.model';
     .btn-icon:hover { background: #e2e8f0; transform: translateY(-1px); }
     .btn-danger { background: #fee2e2; color: #dc2626; }
     .btn-danger:hover { background: #fecaca; }
+    .error-message {
+      margin-bottom: 1rem; padding: 0.75rem 1rem; background: #fee2e2;
+      color: #dc2626; border-radius: 8px; font-size: 0.875rem; }
     .empty-state {
       text-align: center; padding: 4rem 2rem; background: white; border-radius: 16px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
@@ -162,10 +169,12 @@ export class ClientListComponent implements OnInit {
   clients: Client[] = [];
   filteredClients: Client[] = [];
   searchTerm = '';
+  loadError = '';
 
   constructor(
     private clientService: ClientService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
@@ -173,11 +182,15 @@ export class ClientListComponent implements OnInit {
   }
 
   async loadClients() {
+    this.loadError = '';
     try {
       this.clients = await this.clientService.getClients();
       this.filteredClients = this.clients;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading clients:', error);
+      this.loadError = error.message || 'Error al cargar los clientes';
+    } finally {
+      this.cdr.detectChanges();
     }
   }
 
