@@ -7,5 +7,7 @@ export interface Profile {
   phone?: string;
   email?: string;
   logo_url?: string;
+  invoice_prefix?: string;
+  description_options?: string[];
   created_at?: string;
 }

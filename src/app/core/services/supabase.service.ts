@@ -15,4 +15,8 @@ export class SupabaseService {
   get client() {
     return this.supabase;
   }
+
+  async invokeFunction(name: string, body: object) {
+    return this.supabase.functions.invoke(name, { body });
+  }
 }

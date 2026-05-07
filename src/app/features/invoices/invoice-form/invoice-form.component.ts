@@ -5,6 +5,8 @@ import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { InvoiceService } from '../../../core/services/invoice.service';
 import { ClientService } from '../../../core/services/client.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { PdfService } from '../../../core/services/pdf.service';
+import { SupabaseService } from '../../../core/services/supabase.service';
 import { Invoice, InvoiceItem } from '../../../shared/models/invoice.model';
 import { Client } from '../../../shared/models/client.model';
 
@@ -49,7 +51,7 @@ import { Client } from '../../../shared/models/client.model';
             </div>
             <div class="form-group">
               <label>IVA (%)</label>
-              <input type="number" formControlName="tax_rate" (input)="calculateTotals()" />
+              <input type="number" formControlName="tax_rate" (input)="onTaxRateChange()" />
             </div>
             <div class="form-group">
               <label>Estado</label>
@@ -79,19 +81,28 @@ import { Client } from '../../../shared/models/client.model';
               <div [formGroupName]="i" class="item-row">
                 <div class="item-desc">
                   <label>Descripción</label>
-                  <input type="text" formControlName="description" placeholder="Descripción del servicio/producto" />
+                  @if (descriptionOptions.length > 0) {
+                    <select formControlName="description">
+                      <option value="">Seleccionar descripción...</option>
+                      @for (opt of descriptionOptions; track opt) {
+                        <option [value]="opt">{{ opt }}</option>
+                      }
+                    </select>
+                  } @else {
+                    <input type="text" formControlName="description" placeholder="Descripción del servicio/producto" />
+                  }
                 </div>
                 <div class="item-qty">
                   <label>Cantidad</label>
-                  <input type="number" formControlName="quantity" (input)="calculateTotals()" />
+                  <input type="number" formControlName="quantity" (input)="onQuantityInput(i, $event)" />
                 </div>
                 <div class="item-price">
-                  <label>Precio Unit.</label>
-                  <input type="number" formControlName="unit_price" (input)="calculateTotals()" />
+                  <label>Precio Unit. (s/IVA)</label>
+                  <input type="number" formControlName="unit_price" (input)="onUnitPriceInput(i)" />
                 </div>
                 <div class="item-total">
-                  <label>Total</label>
-                  <input type="number" formControlName="total" readonly />
+                  <label>Total c/IVA</label>
+                  <input type="number" formControlName="total_with_iva" (input)="onTotalWithIvaInput(i, $event)" />
                 </div>
                 <button type="button" class="btn-remove" (click)="removeItem(i)" title="Eliminar">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -212,6 +223,7 @@ export class InvoiceFormComponent implements OnInit {
   invoiceForm: FormGroup;
   items: FormArray;
   clients: Client[] = [];
+  descriptionOptions: string[] = [];
   isEdit = false;
   invoiceId?: string;
   loading = false;
@@ -225,6 +237,8 @@ export class InvoiceFormComponent implements OnInit {
     private invoiceService: InvoiceService,
     private clientService: ClientService,
     private authService: AuthService,
+    private pdfService: PdfService,
+    private supabaseService: SupabaseService,
     private router: Router,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef
@@ -242,17 +256,24 @@ export class InvoiceFormComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.loadClients();
+    await Promise.all([this.loadClients(), this.loadDescriptionOptions()]);
     this.invoiceId = this.route.snapshot.paramMap.get('id') || undefined;
     if (this.invoiceId) {
       this.isEdit = true;
       await this.loadInvoice();
     } else {
-      this.invoiceForm.patchValue({
-        invoice_number: this.invoiceService.generateInvoiceNumber()
-      });
+      const profile = await this.authService.getProfile();
+      const invoiceNumber = await this.invoiceService.generateInvoiceNumber(profile?.invoice_prefix);
+      this.invoiceForm.patchValue({ invoice_number: invoiceNumber });
       this.addItem();
     }
+  }
+
+  async loadDescriptionOptions() {
+    try {
+      const profile = await this.authService.getProfile();
+      this.descriptionOptions = profile?.description_options ?? [];
+    } catch { /* sin opciones */ }
   }
 
   async loadClients() {
@@ -279,13 +300,20 @@ export class InvoiceFormComponent implements OnInit {
           status: invoice.status
         });
         this.items.clear();
+        this.lastEditedField = [];
+        this.savedTotalWithIva = [];
         if (invoice.items) {
+          const taxRate = invoice.tax_rate || 21;
           for (const item of invoice.items) {
+            this.lastEditedField.push('unit_price');
+            this.savedTotalWithIva.push(0);
+            const totalWithIva = +((item.unit_price ?? 0) * (item.quantity ?? 1) * (1 + taxRate / 100)).toFixed(2);
             this.items.push(this.fb.group({
               description: [item.description, Validators.required],
               quantity: [item.quantity, Validators.required],
               unit_price: [item.unit_price, Validators.required],
-              total: [item.total]
+              total: [item.total],
+              total_with_iva: [totalWithIva]
             }));
           }
         }
@@ -303,32 +331,140 @@ export class InvoiceFormComponent implements OnInit {
       description: ['', Validators.required],
       quantity: [1, Validators.required],
       unit_price: [0, Validators.required],
-      total: [0]
+      total: [0],
+      total_with_iva: [0]
     });
   }
 
+  lastEditedField: ('unit_price' | 'total_with_iva')[] = [];
+  savedTotalWithIva: number[] = [];
+
   addItem() {
     this.items.push(this.createItem());
+    this.lastEditedField.push('unit_price');
+    this.savedTotalWithIva.push(0);
   }
 
   removeItem(index: number) {
     this.items.removeAt(index);
-    this.calculateTotals();
+    this.lastEditedField.splice(index, 1);
+    this.savedTotalWithIva.splice(index, 1);
+    this.recalcInvoiceTotals();
+  }
+
+  private getTaxRate(): number {
+    return this.invoiceForm.get('tax_rate')?.value || 21;
+  }
+
+  private recalcFromUnitPrice(i: number) {
+    const item = this.items.at(i);
+    const qty = item.get('quantity')?.value || 0;
+    const unitPrice = item.get('unit_price')?.value || 0;
+    const itemTotal = qty * unitPrice;
+    const totalWithIva = +(itemTotal * (1 + this.getTaxRate() / 100)).toFixed(2);
+    item.patchValue({ total: +itemTotal.toFixed(4), total_with_iva: totalWithIva }, { emitEvent: false });
+  }
+
+  private recalcFromTotalWithIva(i: number, totalWithIva?: number, qty?: number) {
+    const item = this.items.at(i);
+    const q = qty ?? item.get('quantity')?.value ?? 1;
+    const t = totalWithIva ?? item.get('total_with_iva')?.value ?? 0;
+    const unitPrice = t / q / (1 + this.getTaxRate() / 100);
+    const itemTotal = unitPrice * q;
+    item.patchValue({ unit_price: +unitPrice.toFixed(4), total: +itemTotal.toFixed(4) }, { emitEvent: false });
+  }
+
+  private recalcInvoiceTotals() {
+    const taxRate = this.getTaxRate();
+    this.subtotal = 0;
+    for (let i = 0; i < this.items.length; i++) {
+      this.subtotal += this.items.at(i).get('total')?.value || 0;
+    }
+    this.taxAmount = this.subtotal * (taxRate / 100);
+    this.total = this.subtotal + this.taxAmount;
   }
 
   calculateTotals() {
-    this.subtotal = 0;
     for (let i = 0; i < this.items.length; i++) {
-      const item = this.items.at(i);
-      const quantity = item.get('quantity')?.value || 0;
-      const unitPrice = item.get('unit_price')?.value || 0;
-      const itemTotal = quantity * unitPrice;
-      item.patchValue({ total: itemTotal });
-      this.subtotal += itemTotal;
+      this.recalcFromUnitPrice(i);
     }
-    const taxRate = this.invoiceForm.get('tax_rate')?.value || 21;
-    this.taxAmount = this.subtotal * (taxRate / 100);
-    this.total = this.subtotal + this.taxAmount;
+    this.recalcInvoiceTotals();
+  }
+
+  onUnitPriceInput(i: number) {
+    this.lastEditedField[i] = 'unit_price';
+    this.recalcFromUnitPrice(i);
+    this.recalcInvoiceTotals();
+  }
+
+  onQuantityInput(i: number, event: Event) {
+    const qty = +(event.target as HTMLInputElement).value || 1;
+    if (this.lastEditedField[i] === 'total_with_iva') {
+      const t = this.savedTotalWithIva[i] || 0;
+      const unitPrice = t / qty / (1 + this.getTaxRate() / 100);
+      const itemTotal = unitPrice * qty;
+      this.items.at(i).patchValue(
+        { unit_price: +unitPrice.toFixed(4), total: +itemTotal.toFixed(4) },
+        { emitEvent: false }
+      );
+    } else {
+      const item = this.items.at(i);
+      const unitPrice = item.get('unit_price')?.value || 0;
+      const itemTotal = qty * unitPrice;
+      const totalWithIva = +(itemTotal * (1 + this.getTaxRate() / 100)).toFixed(2);
+      item.patchValue({ total: +itemTotal.toFixed(4), total_with_iva: totalWithIva }, { emitEvent: false });
+    }
+    this.recalcInvoiceTotals();
+  }
+
+  onTotalWithIvaInput(i: number, event: Event) {
+    const totalWithIva = +(event.target as HTMLInputElement).value || 0;
+    this.lastEditedField[i] = 'total_with_iva';
+    this.savedTotalWithIva[i] = totalWithIva;
+    this.recalcFromTotalWithIva(i, totalWithIva);
+    this.recalcInvoiceTotals();
+  }
+
+  onTaxRateChange() {
+    for (let i = 0; i < this.items.length; i++) {
+      if (this.lastEditedField[i] === 'total_with_iva') {
+        this.recalcFromTotalWithIva(i);
+      } else {
+        this.recalcFromUnitPrice(i);
+      }
+    }
+    this.recalcInvoiceTotals();
+  }
+
+  private async sendInvoiceByEmail(invoiceId: string) {
+    try {
+      const [invoice, profile] = await Promise.all([
+        this.invoiceService.getInvoice(invoiceId),
+        this.authService.getProfile()
+      ]);
+      if (!invoice?.client?.email) {
+        console.warn('Cliente sin email — no se envía factura');
+        return;
+      }
+      console.log('Generando PDF...');
+      const pdfBase64 = await this.pdfService.getPdfBase64(invoice, profile);
+      console.log('PDF generado, llamando Edge Function...');
+      const { data, error } = await this.supabaseService.invokeFunction('send-invoice', {
+        to_email: invoice.client.email,
+        client_name: invoice.client.name,
+        invoice_number: invoice.invoice_number,
+        company_name: profile?.company_name,
+        total: invoice.total,
+        pdf_base64: pdfBase64
+      });
+      if (error) {
+        console.error('Error Edge Function:', error);
+      } else {
+        console.log('Email enviado correctamente:', data);
+      }
+    } catch (err) {
+      console.error('Error enviando factura por email:', err);
+    }
   }
 
   async onSubmit() {
@@ -357,14 +493,21 @@ export class InvoiceFormComponent implements OnInit {
         description: item.description,
         quantity: item.quantity,
         unit_price: item.unit_price,
-        total: item.total
+        total: item.unit_price * item.quantity
       }));
 
+      let savedId = this.invoiceId;
       if (this.isEdit && this.invoiceId) {
         await this.invoiceService.updateInvoice(this.invoiceId, invoiceData, itemsData);
       } else {
-        await this.invoiceService.createInvoice(invoiceData, itemsData);
+        const created = await this.invoiceService.createInvoice(invoiceData, itemsData);
+        savedId = created.id;
       }
+
+      if (formValue.status === 'issued' && savedId) {
+        await this.sendInvoiceByEmail(savedId);
+      }
+
       this.router.navigate(['/invoices']);
     } catch (err: any) {
       this.error = err.message || 'Error al guardar la factura';

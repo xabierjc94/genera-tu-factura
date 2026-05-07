@@ -65,7 +65,8 @@ export class AuthService {
   }
 
   async updateProfile(profile: Partial<Profile>) {
-    const { data: { user } } = await this.supabase.client.auth.getUser();
+    const { data: { session } } = await this.supabase.client.auth.getSession();
+    const user = session?.user;
     if (!user) throw new Error('No user logged in');
 
     const { data, error } = await this.supabase.client
@@ -80,7 +81,8 @@ export class AuthService {
   }
 
   async uploadLogo(file: File): Promise<string> {
-    const { data: { user } } = await this.supabase.client.auth.getUser();
+    const { data: { session } } = await this.supabase.client.auth.getSession();
+    const user = session?.user;
     if (!user) throw new Error('No user logged in');
 
     const fileExt = file.name.split('.').pop();

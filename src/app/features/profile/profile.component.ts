@@ -80,7 +80,7 @@ import { Profile } from '../../shared/models/user.model';
         </div>
 
         <div class="form-actions">
-          <button type="submit" class="btn-primary" [disabled]="profileForm.invalid || !profileForm.dirty || loading">
+          <button type="submit" class="btn-primary" [disabled]="profileForm.invalid || loading">
             @if (!loading) {
               Guardar Cambios
             } @else {
@@ -228,9 +228,12 @@ export class ProfileComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = (e: ProgressEvent<FileReader>) => {
         this.logoPreview = e.target?.result as string;
+        this.cdr.detectChanges();
       };
       reader.readAsDataURL(file);
       input.value = '';
+      this.profileForm.markAsDirty();
+      this.cdr.detectChanges();
     }
   }
 
@@ -270,6 +273,7 @@ export class ProfileComponent implements OnInit {
       this.error = err.message || 'Error al actualizar el perfil';
     } finally {
       this.loading = false;
+      this.cdr.detectChanges();
     }
   }
 }

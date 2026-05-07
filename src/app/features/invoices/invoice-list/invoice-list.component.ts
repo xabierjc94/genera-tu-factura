@@ -4,9 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { InvoiceService } from '../../../core/services/invoice.service';
 import { ClientService } from '../../../core/services/client.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { PdfService } from '../../../core/services/pdf.service';
 import { Invoice } from '../../../shared/models/invoice.model';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import { Profile } from '../../../shared/models/user.model';
 
 @Component({
   selector: 'app-invoice-list',
@@ -184,6 +185,7 @@ import html2canvas from 'html2canvas';
 export class InvoiceListComponent implements OnInit {
   invoices: Invoice[] = [];
   filteredInvoices: Invoice[] = [];
+  profile: Profile | null = null;
   searchTerm = '';
   statusFilter = '';
   statusLabels: any = {
@@ -196,12 +198,22 @@ export class InvoiceListComponent implements OnInit {
   constructor(
     private invoiceService: InvoiceService,
     private clientService: ClientService,
+    private authService: AuthService,
+    private pdfService: PdfService,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
-    await this.loadInvoices();
+    await Promise.all([this.loadInvoices(), this.loadProfile()]);
+  }
+
+  async loadProfile() {
+    try {
+      this.profile = await this.authService.getProfile();
+    } catch (error) {
+      console.error('Error loading profile:', error);
+    }
   }
 
   async loadInvoices() {
@@ -242,36 +254,7 @@ export class InvoiceListComponent implements OnInit {
   }
 
   async downloadPDF(invoice: Invoice) {
-    const doc = new jsPDF();
-    doc.setFontSize(20);
-    doc.text('FACTURA', 105, 20, { align: 'center' });
-    doc.setFontSize(12);
-    doc.text(`Número: ${invoice.invoice_number}`, 20, 40);
-    doc.text(`Fecha: ${invoice.issue_date}`, 20, 50);
-    doc.text(`Cliente: ${invoice.client?.name || 'N/A'}`, 20, 60);
-    doc.text(`Dirección: ${invoice.client?.address || 'N/A'}`, 20, 70);
-    doc.text(`CIF/NIF: ${invoice.client?.cif_nif || 'N/A'}`, 20, 80);
-    let y = 100;
-    doc.text('Descripción', 20, y);
-    doc.text('Cantidad', 100, y);
-    doc.text('Precio', 140, y);
-    doc.text('Total', 180, y);
-    y += 10;
-    if (invoice.items) {
-      for (const item of invoice.items) {
-        doc.text(item.description, 20, y);
-        doc.text(item.quantity?.toString() || '1', 100, y);
-        doc.text(`${item.unit_price}€`, 140, y);
-        doc.text(`${item.total}€`, 180, y);
-        y += 10;
-      }
-    }
-    y += 10;
-    doc.text(`Subtotal: ${invoice.subtotal}€`, 140, y);
-    y += 10;
-    doc.text(`IVA: ${invoice.tax_amount}€`, 140, y);
-    y += 10;
-    doc.text(`TOTAL: ${invoice.total}€`, 140, y, { maxWidth: 50 });
-    doc.save(`factura-${invoice.invoice_number}.pdf`);
+    await this.pdfService.downloadPdf(invoice, this.profile);
   }
+
 }

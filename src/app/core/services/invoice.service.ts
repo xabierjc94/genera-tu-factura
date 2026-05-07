@@ -101,11 +101,27 @@ export class InvoiceService {
     if (error) throw error;
   }
 
-  generateInvoiceNumber(): string {
-    const now = new Date();
-    const year = now.getFullYear();
-    const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-    return `INV-${year}-${random}`;
+  async generateInvoiceNumber(prefix?: string): Promise<string> {
+    const year = new Date().getFullYear();
+    const base = prefix?.trim() ? prefix.trim() : `${year}`;
+
+    const { data } = await this.supabase.client
+      .from('invoices')
+      .select('invoice_number')
+      .ilike('invoice_number', `${base}-%`)
+      .order('invoice_number', { ascending: false })
+      .limit(10);
+
+    let nextSeq = 1;
+    if (data && data.length > 0) {
+      for (const row of data) {
+        const parts = (row.invoice_number as string).split('-');
+        const seq = parseInt(parts[parts.length - 1], 10);
+        if (!isNaN(seq)) { nextSeq = seq + 1; break; }
+      }
+    }
+
+    return `${base}-${String(nextSeq).padStart(4, '0')}`;
   }
 
   calculateInvoiceTotals(items: { quantity: number, unit_price: number, total?: number }[], taxRate: number = 21) {
