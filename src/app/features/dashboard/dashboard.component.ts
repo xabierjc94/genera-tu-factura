@@ -4,6 +4,7 @@ import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { InvoiceService } from '../../core/services/invoice.service';
 import { ClientService } from '../../core/services/client.service';
+import { MessageService } from '../../core/services/message.service';
 import { Profile } from '../../shared/models/user.model';
 
 @Component({
@@ -81,6 +82,13 @@ import { Profile } from '../../shared/models/user.model';
         <button class="action-card" routerLink="/clients/new">
           <div class="action-icon">+</div>
           <span>Nuevo Cliente</span>
+        </button>
+        <button class="action-card" routerLink="/messages">
+          <div class="action-icon-wrapper">
+            <div class="action-icon">✉</div>
+            <span class="unread-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+          </div>
+          <span>Mensajes</span>
         </button>
       </div>
     </div>
@@ -218,6 +226,12 @@ import { Profile } from '../../shared/models/user.model';
       box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
     }
 
+    .action-icon-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     .action-icon {
       width: 50px;
       height: 50px;
@@ -228,6 +242,22 @@ import { Profile } from '../../shared/models/user.model';
       justify-content: center;
       font-size: 1.5rem;
     }
+    .unread-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #ef4444;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid white;
+    }
   `]
 })
 export class DashboardComponent implements OnInit {
@@ -236,12 +266,14 @@ export class DashboardComponent implements OnInit {
   clientCount = 0;
   totalAmount = 0;
   pendingInvoices = 0;
+  unreadCount = 0;
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private invoiceService: InvoiceService,
     private clientService: ClientService,
+    private messageService: MessageService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -258,6 +290,8 @@ export class DashboardComponent implements OnInit {
       this.pendingInvoices = invoices.filter(inv => inv.status === 'issued').length;
       const clients = await this.clientService.getClients();
       this.clientCount = clients.length;
+      const messages = await this.messageService.getMessages();
+      this.unreadCount = messages.filter(m => !m.is_read).length;
     } catch (error) {
       this.router.navigate(['/auth/login']);
     } finally {

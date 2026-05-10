@@ -66,8 +66,16 @@ export const routes: Routes = [
         path: 'settings',
         loadComponent: () => import('./features/settings/settings.component').then(m => m.SettingsComponent)
       },
+      {
+        path: 'messages',
+        loadComponent: () => import('./features/messages/message-inbox/message-inbox.component').then(m => m.MessageInboxComponent)
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
+  },
+  {
+    path: 'm/:invoiceId',
+    loadComponent: () => import('./features/messages/message-form/message-form.component').then(m => m.MessageFormComponent)
   },
   { path: '**', redirectTo: '/auth/login' }
 ];

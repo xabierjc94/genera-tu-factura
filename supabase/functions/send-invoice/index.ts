@@ -11,7 +11,7 @@ serve(async (req) => {
   }
 
   try {
-    const { to_email, client_name, invoice_number, company_name, total, pdf_base64 } = await req.json()
+    const { to_email, client_name, invoice_number, company_name, total, pdf_base64, message_url } = await req.json()
 
     if (!to_email) {
       return new Response(
@@ -29,7 +29,7 @@ serve(async (req) => {
     }
 
     const emailBody = {
-      from: `${company_name || 'Facturación'} <onboarding@resend.dev>`,
+      from: `${company_name || 'Facturación'} <facturas@javierfullstack.es>`,
       to: [to_email],
       subject: `Factura ${invoice_number}`,
       html: `
@@ -41,6 +41,12 @@ serve(async (req) => {
             <p style="color: #334155; font-size: 16px;">Hola <strong>${client_name}</strong>,</p>
             <p style="color: #64748b;">Adjuntamos la factura <strong>${invoice_number}</strong> por un importe total de <strong>${Number(total).toFixed(2)} €</strong>.</p>
             <p style="color: #64748b;">Por favor, revisa el documento adjunto. Si tienes alguna duda, no dudes en contactarnos.</p>
+            ${message_url ? `
+            <div style="text-align: center; margin: 24px 0;">
+              <a href="${message_url}" style="display: inline-block; padding: 12px 28px; background: linear-gradient(135deg, #6366f1, #818cf8); color: white; text-decoration: none; border-radius: 10px; font-weight: 600; font-size: 15px;">
+                Enviar una consulta
+              </a>
+            </div>` : ''}
             <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0;" />
             <p style="color: #94a3b8; font-size: 13px;">Este email ha sido generado automáticamente.</p>
           </div>

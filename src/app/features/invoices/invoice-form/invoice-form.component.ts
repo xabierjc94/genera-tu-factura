@@ -449,16 +449,19 @@ export class InvoiceFormComponent implements OnInit {
       console.log('Generando PDF...');
       const pdfBase64 = await this.pdfService.getPdfBase64(invoice, profile);
       console.log('PDF generado, llamando Edge Function...');
+      const messageUrl = `${window.location.origin}/m/${invoiceId}`;
       const { data, error } = await this.supabaseService.invokeFunction('send-invoice', {
         to_email: invoice.client.email,
         client_name: invoice.client.name,
         invoice_number: invoice.invoice_number,
         company_name: profile?.company_name,
         total: invoice.total,
-        pdf_base64: pdfBase64
+        pdf_base64: pdfBase64,
+        message_url: messageUrl
       });
       if (error) {
-        console.error('Error Edge Function:', error);
+        const body = await (error as any).context?.json?.().catch(() => null);
+        console.error('Error Edge Function:', error, 'Body:', body);
       } else {
         console.log('Email enviado correctamente:', data);
       }

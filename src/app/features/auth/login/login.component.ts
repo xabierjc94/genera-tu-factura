@@ -42,7 +42,18 @@ import { AuthService } from '../../../core/services/auth.service';
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                   <path d="M7 11V7a5 5 0 0110 0v4"></path>
                 </svg>
-                <input type="password" formControlName="password" placeholder="********" />
+                <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="********" />
+                <button type="button" class="toggle-password" (click)="showPassword = !showPassword" tabindex="-1">
+                  <svg *ngIf="!showPassword" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg *ngIf="showPassword" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"></path>
+                    <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
               </div>
             </div>
             <button type="submit" class="btn-login" [disabled]="loginForm.invalid || loading">
@@ -224,6 +235,21 @@ import { AuthService } from '../../../core/services/auth.service';
       box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
     }
 
+    .toggle-password {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #94a3b8;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+    .toggle-password:hover { color: #6366f1; }
+
     .btn-login {
       width: 100%;
       padding: 1rem;
@@ -306,6 +332,7 @@ export class LoginComponent {
   loginForm: FormGroup;
   loading = false;
   error = '';
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
