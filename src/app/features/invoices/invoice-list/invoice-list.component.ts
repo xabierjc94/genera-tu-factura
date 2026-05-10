@@ -8,12 +8,20 @@ import { AuthService } from '../../../core/services/auth.service';
 import { PdfService } from '../../../core/services/pdf.service';
 import { Invoice } from '../../../shared/models/invoice.model';
 import { Profile } from '../../../shared/models/user.model';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-invoice-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, ConfirmDialogComponent],
   template: `
+    <app-confirm-dialog
+      [visible]="confirmVisible"
+      [title]="'Eliminar factura'"
+      [message]="confirmMessage"
+      (confirmed)="onConfirmDelete()"
+      (cancelled)="confirmVisible = false"
+    ></app-confirm-dialog>
     <div class="page-container">
       <div class="page-header">
         <div>
@@ -188,6 +196,9 @@ export class InvoiceListComponent implements OnInit {
   profile: Profile | null = null;
   searchTerm = '';
   statusFilter = '';
+  confirmVisible = false;
+  confirmMessage = '';
+  private pendingDeleteInvoice: Invoice | null = null;
   statusLabels: any = {
     draft: 'Borrador',
     issued: 'Emitida',
@@ -242,14 +253,22 @@ export class InvoiceListComponent implements OnInit {
     this.filteredInvoices = filtered;
   }
 
-  async deleteInvoice(invoice: Invoice) {
-    if (confirm(`¿Eliminar la factura ${invoice.invoice_number}?`)) {
-      try {
-        await this.invoiceService.deleteInvoice(invoice.id!);
-        await this.loadInvoices();
-      } catch (error) {
-        console.error('Error deleting invoice:', error);
-      }
+  deleteInvoice(invoice: Invoice) {
+    this.pendingDeleteInvoice = invoice;
+    this.confirmMessage = `La factura ${invoice.invoice_number} será eliminada permanentemente.`;
+    this.confirmVisible = true;
+  }
+
+  async onConfirmDelete() {
+    this.confirmVisible = false;
+    if (!this.pendingDeleteInvoice) return;
+    try {
+      await this.invoiceService.deleteInvoice(this.pendingDeleteInvoice.id!);
+      await this.loadInvoices();
+    } catch (error) {
+      console.error('Error deleting invoice:', error);
+    } finally {
+      this.pendingDeleteInvoice = null;
     }
   }
 

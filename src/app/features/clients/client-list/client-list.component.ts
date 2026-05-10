@@ -4,12 +4,20 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { ClientService } from '../../../core/services/client.service';
 import { Client } from '../../../shared/models/client.model';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-client-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, ConfirmDialogComponent],
   template: `
+    <app-confirm-dialog
+      [visible]="confirmVisible"
+      [title]="'Eliminar cliente'"
+      [message]="confirmMessage"
+      (confirmed)="onConfirmDelete()"
+      (cancelled)="confirmVisible = false"
+    ></app-confirm-dialog>
     <div class="page-container">
       <div class="page-header">
         <div>
@@ -170,6 +178,9 @@ export class ClientListComponent implements OnInit {
   filteredClients: Client[] = [];
   searchTerm = '';
   loadError = '';
+  confirmVisible = false;
+  confirmMessage = '';
+  private pendingDeleteClient: Client | null = null;
 
   constructor(
     private clientService: ClientService,
@@ -207,14 +218,22 @@ export class ClientListComponent implements OnInit {
     }
   }
 
-  async deleteClient(client: Client) {
-    if (confirm(`¿Eliminar al cliente ${client.name}?`)) {
-      try {
-        await this.clientService.deleteClient(client.id!);
-        await this.loadClients();
-      } catch (error) {
-        console.error('Error deleting client:', error);
-      }
+  deleteClient(client: Client) {
+    this.pendingDeleteClient = client;
+    this.confirmMessage = `El cliente ${client.name} será eliminado permanentemente.`;
+    this.confirmVisible = true;
+  }
+
+  async onConfirmDelete() {
+    this.confirmVisible = false;
+    if (!this.pendingDeleteClient) return;
+    try {
+      await this.clientService.deleteClient(this.pendingDeleteClient.id!);
+      await this.loadClients();
+    } catch (error) {
+      console.error('Error deleting client:', error);
+    } finally {
+      this.pendingDeleteClient = null;
     }
   }
 }

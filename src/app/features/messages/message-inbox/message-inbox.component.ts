@@ -3,12 +3,20 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MessageService } from '../../../core/services/message.service';
 import { Message } from '../../../shared/models/message.model';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-message-inbox',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ConfirmDialogComponent],
   template: `
+    <app-confirm-dialog
+      [visible]="confirmVisible"
+      [title]="'Eliminar mensaje'"
+      [message]="'Este mensaje será eliminado permanentemente.'"
+      (confirmed)="onConfirmDelete()"
+      (cancelled)="confirmVisible = false"
+    ></app-confirm-dialog>
     <div class="page-container">
       <div class="page-header">
         <div>
@@ -167,6 +175,8 @@ import { Message } from '../../../shared/models/message.model';
 export class MessageInboxComponent implements OnInit {
   messages: Message[] = [];
   selectedMessage: Message | null = null;
+  confirmVisible = false;
+  private pendingDeleteMessage: Message | null = null;
 
   constructor(
     private messageService: MessageService,
@@ -199,13 +209,19 @@ export class MessageInboxComponent implements OnInit {
     this.selectedMessage = null;
   }
 
-  async deleteMessage(event: Event, msg: Message) {
+  deleteMessage(event: Event, msg: Message) {
     event.stopPropagation();
     if (!msg.id) return;
-    if (confirm('¿Eliminar este mensaje?')) {
-      await this.messageService.deleteMessage(msg.id);
-      this.messages = this.messages.filter(m => m.id !== msg.id);
-      this.cdr.detectChanges();
-    }
+    this.pendingDeleteMessage = msg;
+    this.confirmVisible = true;
+  }
+
+  async onConfirmDelete() {
+    this.confirmVisible = false;
+    if (!this.pendingDeleteMessage?.id) return;
+    await this.messageService.deleteMessage(this.pendingDeleteMessage.id);
+    this.messages = this.messages.filter(m => m.id !== this.pendingDeleteMessage!.id);
+    this.pendingDeleteMessage = null;
+    this.cdr.detectChanges();
   }
 }
