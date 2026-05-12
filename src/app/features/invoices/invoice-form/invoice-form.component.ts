@@ -509,8 +509,7 @@ export class InvoiceFormComponent implements OnInit {
         savedId = created.id;
       }
 
-      const isTransitioningToIssued = formValue.status === 'issued' && this.originalStatus !== 'issued';
-      if (isTransitioningToIssued && savedId) {
+      if (formValue.status === 'issued' && savedId) {
         await this.sendInvoiceByEmail(savedId);
       }
 
