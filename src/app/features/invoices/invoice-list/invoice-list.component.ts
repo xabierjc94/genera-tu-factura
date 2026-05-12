@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { InvoiceService } from '../../../core/services/invoice.service';
 import { ClientService } from '../../../core/services/client.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -15,6 +16,38 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule, ConfirmDialogComponent],
   template: `
+    <!-- Preview Modal -->
+    <div class="preview-overlay" *ngIf="previewVisible" (click)="closePreview()">
+      <div class="preview-modal" (click)="$event.stopPropagation()">
+        <div class="preview-header">
+          <span class="preview-title">{{ previewInvoiceNumber }}</span>
+          <div class="preview-actions">
+            <button class="btn-secondary" (click)="downloadPDF(previewInvoiceRef!)" [disabled]="previewLoading">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Descargar
+            </button>
+            <button class="preview-close" (click)="closePreview()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="preview-body">
+          <div class="preview-loading" *ngIf="previewLoading">
+            <div class="spinner"></div>
+            <span>Generando previsualización...</span>
+          </div>
+          <iframe *ngIf="!previewLoading && previewUrl" [src]="previewUrl" class="preview-iframe"></iframe>
+        </div>
+      </div>
+    </div>
+
     <app-confirm-dialog
       [visible]="confirmVisible"
       [title]="'Eliminar factura'"
@@ -87,6 +120,12 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path>
                       <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                  </button>
+                  <button class="btn-icon" (click)="previewPDF(invoice)" title="Previsualizar PDF">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
                     </svg>
                   </button>
                   <button class="btn-icon" (click)="downloadPDF(invoice)" title="Descargar PDF">
@@ -188,6 +227,38 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
     .empty-state svg { margin-bottom: 1rem; }
     .empty-state h3 { color: #334155; margin-bottom: 0.5rem; }
     .empty-state p { color: #94a3b8; margin-bottom: 1.5rem; }
+    .preview-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+      z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .preview-modal {
+      background: white; border-radius: 16px; width: 100%; max-width: 860px;
+      height: 90vh; display: flex; flex-direction: column;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.3); overflow: hidden; }
+    .preview-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.25rem; border-bottom: 1px solid #e2e8f0; background: #f8fafc; flex-shrink: 0; }
+    .preview-title { font-weight: 600; color: #0f172a; font-size: 0.95rem; }
+    .preview-actions { display: flex; align-items: center; gap: 0.75rem; }
+    .preview-close {
+      width: 36px; height: 36px; border: none; border-radius: 8px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      background: #fee2e2; color: #dc2626; transition: all 0.2s; }
+    .preview-close:hover { background: #fecaca; }
+    .preview-body { flex: 1; overflow: hidden; position: relative; }
+    .preview-iframe { width: 100%; height: 100%; border: none; display: block; }
+    .preview-loading {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 1rem; color: #64748b; }
+    .spinner {
+      width: 40px; height: 40px; border: 3px solid #e2e8f0;
+      border-top-color: #6366f1; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn-secondary {
+      display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
+      background: white; border: 1.5px solid #e2e8f0; border-radius: 8px;
+      font-size: 0.875rem; font-weight: 500; color: #475569; cursor: pointer; transition: all 0.2s; }
+    .btn-secondary:hover { border-color: #6366f1; color: #6366f1; }
+    .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
   `]
 })
 export class InvoiceListComponent implements OnInit {
@@ -199,6 +270,11 @@ export class InvoiceListComponent implements OnInit {
   confirmVisible = false;
   confirmMessage = '';
   private pendingDeleteInvoice: Invoice | null = null;
+  previewVisible = false;
+  previewLoading = false;
+  previewUrl: SafeResourceUrl | null = null;
+  previewInvoiceNumber = '';
+  previewInvoiceRef: Invoice | null = null;
   statusLabels: any = {
     draft: 'Borrador',
     issued: 'Emitida',
@@ -212,7 +288,8 @@ export class InvoiceListComponent implements OnInit {
     private authService: AuthService,
     private pdfService: PdfService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private sanitizer: DomSanitizer
   ) {}
 
   async ngOnInit() {
@@ -274,6 +351,28 @@ export class InvoiceListComponent implements OnInit {
 
   async downloadPDF(invoice: Invoice) {
     await this.pdfService.downloadPdf(invoice, this.profile);
+  }
+
+  async previewPDF(invoice: Invoice) {
+    this.previewVisible = true;
+    this.previewLoading = true;
+    this.previewUrl = null;
+    this.previewInvoiceNumber = `Factura ${invoice.invoice_number}`;
+    this.previewInvoiceRef = invoice;
+    this.cdr.detectChanges();
+    try {
+      const dataUri = await this.pdfService.getPreviewDataUri(invoice, this.profile);
+      this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(dataUri);
+    } finally {
+      this.previewLoading = false;
+      this.cdr.detectChanges();
+    }
+  }
+
+  closePreview() {
+    this.previewVisible = false;
+    this.previewUrl = null;
+    this.previewInvoiceRef = null;
   }
 
 }
