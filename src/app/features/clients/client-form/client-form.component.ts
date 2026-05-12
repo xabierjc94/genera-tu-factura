@@ -128,7 +128,7 @@ export class ClientFormComponent implements OnInit {
       cif_nif: [''],
       address: [''],
       province: [''],
-      email: ['', Validators.email],
+      email: [''],
       phone: ['']
     });
   }
