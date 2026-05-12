@@ -291,7 +291,7 @@ export class InvoiceFormComponent implements OnInit {
       invoice_number: [''],
       issue_date: [new Date().toISOString().split('T')[0]],
       due_date: [new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0]],
-      tax_rate: [21, Validators.required],
+      tax_rate: [10, Validators.required],
       status: ['draft'],
       bank_account: [''],
       items: this.items
@@ -421,7 +421,7 @@ export class InvoiceFormComponent implements OnInit {
     const t = totalWithIva ?? item.get('total_with_iva')?.value ?? 0;
     const unitPrice = t / q / (1 + this.getTaxRate() / 100);
     const itemTotal = unitPrice * q;
-    item.patchValue({ unit_price: +unitPrice.toFixed(4), total: +itemTotal.toFixed(4) }, { emitEvent: false });
+    item.patchValue({ unit_price: +unitPrice.toFixed(2), total: +itemTotal.toFixed(4) }, { emitEvent: false });
   }
 
   private recalcInvoiceTotals() {
@@ -454,7 +454,7 @@ export class InvoiceFormComponent implements OnInit {
       const unitPrice = t / qty / (1 + this.getTaxRate() / 100);
       const itemTotal = unitPrice * qty;
       this.items.at(i).patchValue(
-        { unit_price: +unitPrice.toFixed(4), total: +itemTotal.toFixed(4) },
+        { unit_price: +unitPrice.toFixed(2), total: +itemTotal.toFixed(4) },
         { emitEvent: false }
       );
     } else {
