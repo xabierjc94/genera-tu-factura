@@ -141,7 +141,7 @@ import { Client } from '../../../shared/models/client.model';
           </button>
         </div>
         @if (error) {
-          <div class="error-message">{{ error }}</div>
+          <div [class]="error.startsWith('Error al enviar') || error.startsWith('El cliente no tiene email') ? 'warn-message' : 'error-message'">{{ error }}</div>
         }
       </form>
     </div>
@@ -217,6 +217,9 @@ import { Client } from '../../../shared/models/client.model';
     .error-message {
       margin-top: 1rem; padding: 0.75rem 1rem; background: #fee2e2;
       color: #dc2626; border-radius: 8px; font-size: 0.875rem; text-align: center; }
+    .warn-message {
+      margin-top: 1rem; padding: 0.75rem 1rem; background: #fef3c7;
+      color: #92400e; border-radius: 8px; font-size: 0.875rem; text-align: center; }
   `]
 })
 export class InvoiceFormComponent implements OnInit {
@@ -438,19 +441,16 @@ export class InvoiceFormComponent implements OnInit {
     this.recalcInvoiceTotals();
   }
 
-  private async sendInvoiceByEmail(invoiceId: string) {
+  private async sendInvoiceByEmail(invoiceId: string): Promise<string | null> {
     try {
       const [invoice, profile] = await Promise.all([
         this.invoiceService.getInvoice(invoiceId),
         this.authService.getProfile()
       ]);
       if (!invoice?.client?.email) {
-        console.warn('Cliente sin email — no se envía factura');
-        return;
+        return 'El cliente no tiene email configurado — no se enviará la factura.';
       }
-      console.log('Generando PDF...');
       const pdfBase64 = await this.pdfService.getPdfBase64(invoice, profile);
-      console.log('PDF generado, llamando Edge Function...');
       const messageUrl = `${window.location.origin}/m/${invoiceId}`;
       const { data, error } = await this.supabaseService.invokeFunction('send-invoice', {
         to_email: invoice.client.email,
@@ -462,13 +462,20 @@ export class InvoiceFormComponent implements OnInit {
         message_url: messageUrl
       });
       if (error) {
-        const body = await (error as any).context?.json?.().catch(() => null);
-        console.error('Error Edge Function:', error, 'Body:', body);
-      } else {
-        console.log('Email enviado correctamente:', data);
+        let detail = error.message || String(error);
+        try {
+          const body = await (error as any).context?.json();
+          if (body?.error) detail = typeof body.error === 'string' ? body.error : JSON.stringify(body.error);
+        } catch { /* ignore */ }
+        console.error('Error Edge Function:', detail);
+        return `Error al enviar el email: ${detail}`;
       }
-    } catch (err) {
-      console.error('Error enviando factura por email:', err);
+      console.log('Email enviado correctamente:', data);
+      return null;
+    } catch (err: any) {
+      const msg = err?.message || String(err);
+      console.error('Error enviando factura por email:', msg);
+      return `Error al enviar el email: ${msg}`;
     }
   }
 
@@ -510,7 +517,13 @@ export class InvoiceFormComponent implements OnInit {
       }
 
       if (formValue.status === 'issued' && savedId) {
-        await this.sendInvoiceByEmail(savedId);
+        const emailError = await this.sendInvoiceByEmail(savedId);
+        if (emailError) {
+          this.error = emailError;
+          this.loading = false;
+          setTimeout(() => this.router.navigate(['/invoices']), 4000);
+          return;
+        }
       }
 
       this.router.navigate(['/invoices']);
