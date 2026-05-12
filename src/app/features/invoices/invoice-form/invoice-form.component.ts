@@ -498,7 +498,7 @@ export class InvoiceFormComponent implements OnInit {
         description: item.description,
         quantity: item.quantity,
         unit_price: item.unit_price,
-        total: item.unit_price * item.quantity
+        total: item.total
       }));
 
       let savedId = this.invoiceId;
