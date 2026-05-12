@@ -79,6 +79,15 @@ import { Profile } from '../../shared/models/user.model';
           </div>
         </div>
 
+        <div class="form-section">
+          <h3>Datos Bancarios</h3>
+          <div class="form-group full-width">
+            <label>Número de Cuenta (IBAN)</label>
+            <input type="text" formControlName="bank_account" placeholder="ES00 0000 0000 0000 0000 0000" />
+            <small>Se puede incluir en las facturas para recibir pagos</small>
+          </div>
+        </div>
+
         <div class="form-actions">
           <button type="submit" class="btn-primary" [disabled]="profileForm.invalid || loading">
             @if (!loading) {
@@ -192,7 +201,8 @@ export class ProfileComponent implements OnInit {
       address: ['', Validators.required],
       province: ['', Validators.required],
       phone: [''],
-      email: ['']
+      email: [''],
+      bank_account: ['']
     });
   }
 
@@ -210,7 +220,8 @@ export class ProfileComponent implements OnInit {
           address: this.profile.address || '',
           province: this.profile.province || '',
           phone: this.profile.phone || '',
-          email: this.profile.email || ''
+          email: this.profile.email || '',
+          bank_account: this.profile.bank_account || ''
         });
       }
     } catch (err: any) {

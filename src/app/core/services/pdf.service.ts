@@ -158,6 +158,17 @@ export class PdfService {
     doc.text('TOTAL:', totX, y);
     doc.text(`${Number(invoice.total).toFixed(2)} €`, 196, y, { align: 'right' });
 
+    // Datos bancarios
+    if (invoice.bank_account) {
+      y += 14;
+      doc.setFillColor(...indigoXLight);
+      doc.roundedRect(14, y - 6, 182, 14, 2, 2, 'F');
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(...indigoMid);
+      doc.text('DATOS BANCARIOS', 18, y);
+      doc.setFont('helvetica', 'normal'); doc.setTextColor(...dark);
+      doc.text(invoice.bank_account, 18, y + 6);
+    }
+
     // Pie
     doc.setDrawColor(...indigoLight); doc.setLineWidth(0.4);
     doc.line(14, 282, 196, 282);

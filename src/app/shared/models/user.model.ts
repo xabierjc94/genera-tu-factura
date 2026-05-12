@@ -9,5 +9,6 @@ export interface Profile {
   logo_url?: string;
   invoice_prefix?: string;
   description_options?: string[];
+  bank_account?: string;
   created_at?: string;
 }

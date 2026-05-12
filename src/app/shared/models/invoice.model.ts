@@ -12,6 +12,7 @@ export interface Invoice {
   tax_amount?: number;
   total?: number;
   status?: 'draft' | 'issued' | 'paid' | 'cancelled';
+  bank_account?: string;
   created_at?: string;
   client?: Client;
   items?: InvoiceItem[];

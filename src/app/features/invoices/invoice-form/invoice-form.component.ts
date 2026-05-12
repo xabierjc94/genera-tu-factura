@@ -115,6 +115,34 @@ import { Client } from '../../../shared/models/client.model';
           </div>
         </div>
 
+        <div class="form-section">
+          <div class="section-header">
+            <h3>Datos de Pago</h3>
+            <button type="button" class="btn-toggle" (click)="toggleBankAccount()">
+              @if (showBankAccount) {
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+                Quitar cuenta bancaria
+              } @else {
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Añadir cuenta bancaria
+              }
+            </button>
+          </div>
+          @if (showBankAccount) {
+            <div class="form-group">
+              <label>Número de Cuenta (IBAN)</label>
+              <input type="text" formControlName="bank_account" placeholder="Ej: ES00 0000 0000 0000 0000 0000" />
+              <small>Aparecerá en la factura PDF para que el cliente pueda realizar el pago</small>
+            </div>
+          }
+        </div>
+
         <div class="totals-card">
           <div class="total-row">
             <span>Subtotal:</span>
@@ -180,10 +208,16 @@ import { Client } from '../../../shared/models/client.model';
       background: #eef2ff; color: #6366f1; border: none; border-radius: 8px;
       font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
     .btn-add:hover { background: #e0e7ff; }
+    .btn-toggle {
+      display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
+      background: #f1f5f9; color: #64748b; border: none; border-radius: 8px;
+      font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .btn-toggle:hover { background: #e2e8f0; }
     .form-grid {
       display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
     .form-group { display: flex; flex-direction: column; }
     .form-group.full-width { grid-column: 1 / -1; }
+    small { margin-top: 0.25rem; color: #94a3b8; font-size: 0.8rem; }
     label { display: block; margin-bottom: 0.5rem; color: #334155; font-weight: 500; font-size: 0.875rem; }
     input, select {
       width: 100%; padding: 0.875rem 1rem; border: 2px solid #e2e8f0;
@@ -235,6 +269,7 @@ export class InvoiceFormComponent implements OnInit {
   subtotal = 0;
   taxAmount = 0;
   total = 0;
+  showBankAccount = false;
 
   constructor(
     private fb: FormBuilder,
@@ -255,6 +290,7 @@ export class InvoiceFormComponent implements OnInit {
       due_date: [new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0]],
       tax_rate: [21, Validators.required],
       status: ['draft'],
+      bank_account: [''],
       items: this.items
     });
   }
@@ -268,7 +304,11 @@ export class InvoiceFormComponent implements OnInit {
     } else {
       const profile = await this.authService.getProfile();
       const invoiceNumber = await this.invoiceService.generateInvoiceNumber(profile?.invoice_prefix);
-      this.invoiceForm.patchValue({ invoice_number: invoiceNumber });
+      this.invoiceForm.patchValue({
+        invoice_number: invoiceNumber,
+        bank_account: profile?.bank_account || ''
+      });
+      this.showBankAccount = !!(profile?.bank_account);
       this.addItem();
     }
   }
@@ -302,8 +342,10 @@ export class InvoiceFormComponent implements OnInit {
           issue_date: invoice.issue_date,
           due_date: invoice.due_date,
           tax_rate: invoice.tax_rate,
-          status: invoice.status
+          status: invoice.status,
+          bank_account: invoice.bank_account || ''
         });
+        this.showBankAccount = !!(invoice.bank_account);
         this.items.clear();
         this.lastEditedField = [];
         this.savedTotalWithIva = [];
@@ -430,6 +472,13 @@ export class InvoiceFormComponent implements OnInit {
     this.recalcInvoiceTotals();
   }
 
+  toggleBankAccount() {
+    this.showBankAccount = !this.showBankAccount;
+    if (!this.showBankAccount) {
+      this.invoiceForm.patchValue({ bank_account: '' });
+    }
+  }
+
   onTaxRateChange() {
     for (let i = 0; i < this.items.length; i++) {
       if (this.lastEditedField[i] === 'total_with_iva') {
@@ -498,7 +547,8 @@ export class InvoiceFormComponent implements OnInit {
         subtotal: this.subtotal,
         tax_amount: this.taxAmount,
         total: this.total,
-        status: formValue.status
+        status: formValue.status,
+        bank_account: formValue.bank_account || null
       };
 
       const itemsData = formValue.items.map((item: any) => ({
