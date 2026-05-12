@@ -226,6 +226,7 @@ export class InvoiceFormComponent implements OnInit {
   descriptionOptions: string[] = [];
   isEdit = false;
   invoiceId?: string;
+  originalStatus = 'draft';
   loading = false;
   error = '';
   subtotal = 0;
@@ -291,6 +292,7 @@ export class InvoiceFormComponent implements OnInit {
     try {
       const invoice = await this.invoiceService.getInvoice(this.invoiceId);
       if (invoice) {
+        this.originalStatus = invoice.status || 'draft';
         this.invoiceForm.patchValue({
           client_id: invoice.client_id,
           invoice_number: invoice.invoice_number,
@@ -507,7 +509,8 @@ export class InvoiceFormComponent implements OnInit {
         savedId = created.id;
       }
 
-      if (formValue.status === 'issued' && savedId) {
+      const isTransitioningToIssued = formValue.status === 'issued' && this.originalStatus !== 'issued';
+      if (isTransitioningToIssued && savedId) {
         await this.sendInvoiceByEmail(savedId);
       }
 
