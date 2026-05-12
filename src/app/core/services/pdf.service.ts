@@ -79,7 +79,7 @@ export class PdfService {
     // Bloque cliente
     let y = headerH + 14;
     doc.setFillColor(...indigoXLight);
-    doc.roundedRect(14, y - 6, 90, 32, 3, 3, 'F');
+    doc.roundedRect(14, y - 6, 90, 38, 3, 3, 'F');
     doc.setFontSize(7.5); doc.setFont('helvetica', 'bold');
     doc.setTextColor(...indigoMid);
     doc.text('CLIENTE', 18, y);
@@ -90,6 +90,7 @@ export class PdfService {
     doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...gray);
     if (invoice.client?.cif_nif) { doc.text(`CIF/NIF: ${invoice.client.cif_nif}`, 18, y); y += 5; }
     if (invoice.client?.address) { doc.text(invoice.client.address, 18, y); y += 5; }
+    if (invoice.client?.province) { doc.text(invoice.client.province, 18, y); y += 5; }
 
     // Tabla
     y = headerH + 56;
