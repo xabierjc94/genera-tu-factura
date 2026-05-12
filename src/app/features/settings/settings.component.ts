@@ -90,22 +90,23 @@ import { AuthService } from '../../core/services/auth.service';
   styles: [`
     .page-container { max-width: 800px; margin: 0 auto; padding: 2rem; }
     .page-header { margin-bottom: 2rem; }
-    h1 { font-size: 2rem; margin: 0 0 0.5rem; color: #0f172a; }
+    h1 { font-size: 2rem; margin: 0 0 0.5rem; color: #f1f5f9; }
     .gradient-text {
       background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .subtitle { color: #64748b; margin: 0; font-size: 0.95rem; }
+    .subtitle { color: #94a3b8; margin: 0; font-size: 0.95rem; }
     .card {
-      background: white; border-radius: 16px; padding: 2rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+      background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 2rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
     .card-header { margin-bottom: 1.5rem; }
-    .card-header h2 { margin: 0 0 0.25rem; color: #0f172a; font-size: 1.1rem; }
-    .card-subtitle { color: #64748b; font-size: 0.875rem; margin: 0; }
+    .card-header h2 { margin: 0 0 0.25rem; color: #f1f5f9; font-size: 1.1rem; }
+    .card-subtitle { color: #94a3b8; font-size: 0.875rem; margin: 0; }
     .add-row { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
     .input-add {
-      flex: 1; padding: 0.75rem 1rem; border: 2px solid #e2e8f0; border-radius: 12px;
-      font-size: 1rem; background: #f8fafc; transition: all 0.2s; outline: none; }
-    .input-add:focus { border-color: #6366f1; background: white; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+      flex: 1; padding: 0.75rem 1rem; border: 2px solid #334155; border-radius: 12px;
+      font-size: 1rem; background: #0f172a; color: #f1f5f9; transition: all 0.2s; outline: none; }
+    .input-add::placeholder { color: #475569; }
+    .input-add:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
     .btn-primary {
       display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem;
       background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%); color: white;
@@ -114,28 +115,28 @@ import { AuthService } from '../../core/services/auth.service';
     .btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(99,102,241,0.3); }
     .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
     .options-list { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
-    .empty { color: #94a3b8; font-size: 0.9rem; text-align: center; padding: 1.5rem 0; }
+    .empty { color: #64748b; font-size: 0.9rem; text-align: center; padding: 1.5rem 0; }
     .option-row {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0.75rem 1rem; background: #f8fafc; border-radius: 10px;
-      border: 1px solid #e2e8f0; }
-    .option-text { color: #334155; font-size: 0.95rem; }
+      padding: 0.75rem 1rem; background: #0f172a; border-radius: 10px;
+      border: 1px solid #334155; }
+    .option-text { color: #cbd5e1; font-size: 0.95rem; }
     .btn-remove {
       width: 28px; height: 28px; border: none; border-radius: 6px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      background: #fee2e2; color: #dc2626; transition: all 0.2s; flex-shrink: 0; }
-    .btn-remove:hover { background: #fecaca; }
+      background: rgba(220,38,38,0.15); color: #f87171; transition: all 0.2s; flex-shrink: 0; }
+    .btn-remove:hover { background: rgba(220,38,38,0.25); }
     .prefix-row { margin-bottom: 1.5rem; }
     .prefix-input-wrap { display: flex; flex-direction: column; gap: 0.4rem; max-width: 360px; }
     .prefix-input-wrap small { color: #64748b; font-size: 0.8rem; }
-    .card-footer { display: flex; align-items: center; gap: 1rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
+    .card-footer { display: flex; align-items: center; gap: 1rem; padding-top: 1rem; border-top: 1px solid #334155; }
     .spinner {
       display: inline-block; width: 18px; height: 18px;
       border: 2px solid rgba(255,255,255,0.3); border-top-color: white;
       border-radius: 50%; animation: spin 0.6s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .success-msg { color: #065f46; font-size: 0.875rem; }
-    .error-msg { color: #dc2626; font-size: 0.875rem; }
+    .success-msg { color: #34d399; font-size: 0.875rem; }
+    .error-msg { color: #f87171; font-size: 0.875rem; }
   `]
 })
 export class SettingsComponent implements OnInit {

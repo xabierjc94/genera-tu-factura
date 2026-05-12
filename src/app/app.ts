@@ -77,16 +77,17 @@ import { CommonModule } from '@angular/common';
   styles: [`
     .app-container {
       min-height: 100vh;
-      background: #f1f5f9;
+      background: #0f172a;
     }
 
     .navbar {
-      background: white;
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
       padding: 0 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -114,7 +115,7 @@ import { CommonModule } from '@angular/common';
 
     .brand-text {
       font-weight: 600;
-      color: #0f172a;
+      color: #f1f5f9;
       font-size: 1.1rem;
     }
 
@@ -130,7 +131,7 @@ import { CommonModule } from '@angular/common';
       gap: 0.5rem;
       padding: 0.5rem 1rem;
       border-radius: 8px;
-      color: #64748b;
+      color: #94a3b8;
       text-decoration: none;
       font-weight: 500;
       font-size: 0.9rem;
@@ -138,13 +139,13 @@ import { CommonModule } from '@angular/common';
     }
 
     .nav-link:hover {
-      background: #f1f5f9;
-      color: #334155;
+      background: #334155;
+      color: #e2e8f0;
     }
 
     .nav-link.active {
-      background: #eef2ff;
-      color: #6366f1;
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
     }
 
     .logout-btn {
@@ -152,8 +153,8 @@ import { CommonModule } from '@angular/common';
       align-items: center;
       gap: 0.5rem;
       padding: 0.5rem 1rem;
-      background: #fee2e2;
-      color: #dc2626;
+      background: rgba(220, 38, 38, 0.15);
+      color: #f87171;
       border: none;
       border-radius: 8px;
       font-weight: 500;
@@ -163,7 +164,7 @@ import { CommonModule } from '@angular/common';
     }
 
     .logout-btn:hover {
-      background: #fecaca;
+      background: rgba(220, 38, 38, 0.25);
     }
 
     .main-content {

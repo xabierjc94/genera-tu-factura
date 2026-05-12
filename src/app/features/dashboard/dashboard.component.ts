@@ -97,7 +97,7 @@ import { Profile } from '../../shared/models/user.model';
     .dashboard-content {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 2rem;
+      padding: 0;
     }
 
     .welcome-section {
@@ -107,11 +107,12 @@ import { Profile } from '../../shared/models/user.model';
     .welcome-section h2 {
       font-size: 2rem;
       margin: 0 0 0.5rem;
-      color: #0f172a;
+      background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
 
     .welcome-section p {
-      color: #64748b;
+      color: #94a3b8;
       font-size: 1.1rem;
       margin: 0;
     }
@@ -124,10 +125,11 @@ import { Profile } from '../../shared/models/user.model';
     }
 
     .stat-card {
-      background: white;
+      background: #1e293b;
+      border: 1px solid #334155;
       border-radius: 16px;
       padding: 1.5rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
       transition: all 0.3s;
       position: relative;
       overflow: hidden;
@@ -139,7 +141,7 @@ import { Profile } from '../../shared/models/user.model';
       top: 0;
       left: 0;
       right: 0;
-      height: 4px;
+      height: 3px;
     }
 
     .stat-primary::before { background: linear-gradient(90deg, #6366f1, #818cf8); }
@@ -149,12 +151,13 @@ import { Profile } from '../../shared/models/user.model';
 
     .stat-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      border-color: #475569;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
     }
 
     .stat-icon {
-      width: 60px;
-      height: 60px;
+      width: 56px;
+      height: 56px;
       border-radius: 12px;
       display: flex;
       align-items: center;
@@ -162,10 +165,10 @@ import { Profile } from '../../shared/models/user.model';
       margin-bottom: 1rem;
     }
 
-    .stat-primary .stat-icon { background: #eef2ff; color: #6366f1; }
-    .stat-secondary .stat-icon { background: #fdf2f8; color: #ec4899; }
-    .stat-success .stat-icon { background: #ecfdf5; color: #10b981; }
-    .stat-warning .stat-icon { background: #fffbeb; color: #f59e0b; }
+    .stat-primary .stat-icon { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
+    .stat-secondary .stat-icon { background: rgba(236, 72, 153, 0.15); color: #f472b6; }
+    .stat-success .stat-icon { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .stat-warning .stat-icon { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
 
     .stat-content {
       display: flex;
@@ -176,19 +179,19 @@ import { Profile } from '../../shared/models/user.model';
     .stat-number {
       font-size: 2rem;
       font-weight: 700;
-      color: #0f172a;
+      color: #f1f5f9;
       line-height: 1;
     }
 
     .stat-label {
       font-size: 0.875rem;
-      color: #64748b;
+      color: #94a3b8;
       margin-top: 0.25rem;
     }
 
     .stat-link {
       display: inline-block;
-      color: #6366f1;
+      color: #818cf8;
       font-weight: 500;
       font-size: 0.875rem;
       text-decoration: none;
@@ -197,6 +200,7 @@ import { Profile } from '../../shared/models/user.model';
 
     .stat-link:hover {
       transform: translateX(4px);
+      color: #a5b4fc;
     }
 
     .actions-grid {
@@ -206,9 +210,9 @@ import { Profile } from '../../shared/models/user.model';
     }
 
     .action-card {
-      background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
-      color: white;
-      border: none;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #e2e8f0;
       border-radius: 12px;
       padding: 1.5rem;
       display: flex;
@@ -223,7 +227,10 @@ import { Profile } from '../../shared/models/user.model';
 
     .action-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
+      background: #273549;
+      border-color: #6366f1;
+      box-shadow: 0 12px 30px rgba(99, 102, 241, 0.25);
+      color: #fff;
     }
 
     .action-icon-wrapper {
@@ -235,7 +242,8 @@ import { Profile } from '../../shared/models/user.model';
     .action-icon {
       width: 50px;
       height: 50px;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -256,7 +264,7 @@ import { Profile } from '../../shared/models/user.model';
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2px solid white;
+      border: 2px solid #1e293b;
     }
   `]
 })

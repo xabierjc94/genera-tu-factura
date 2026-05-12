@@ -118,7 +118,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
     }
     h1 { font-size: 2rem; margin:0 0 0.5rem; background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .subtitle { color: #64748b; margin:0; font-size: 0.95rem; }
+    .subtitle { color: #94a3b8; margin:0; font-size: 0.95rem; }
     .btn-primary {
       display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem;
       background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%); color: white;
@@ -128,49 +128,55 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
     .filters { margin-bottom: 1.5rem; }
     .search-box {
       display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem;
-      background: white; border: 2px solid #e2e8f0; border-radius: 12px;
+      background: #1e293b; border: 2px solid #334155; border-radius: 12px;
       max-width: 400px; transition: all 0.2s; }
-    .search-box:focus-within { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
-    .search-box svg { color: #94a3b8; flex-shrink: 0; }
-    .search-box input { border: none; outline: none; background: transparent; width: 100%; font-size: 0.95rem; }
+    .search-box:focus-within { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); }
+    .search-box svg { color: #64748b; flex-shrink: 0; }
+    .search-box input { border: none; outline: none; background: transparent; width: 100%; font-size: 0.95rem; color: #f1f5f9; }
+    .search-box input::placeholder { color: #64748b; }
     .table-container {
-      background: white; border-radius: 16px; overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
+      background: #1e293b; border: 1px solid #334155; border-radius: 16px; overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3); }
     table { width: 100%; border-collapse: collapse; }
     th {
-      background: #f8fafc; padding: 1rem; text-align: left; font-weight: 600;
-      color: #475569; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; }
+      background: #141d2e; padding: 1rem; text-align: left; font-weight: 600;
+      color: #64748b; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; }
     .table-row { transition: background 0.2s; }
-    .table-row:hover { background: #f8fafc; }
-    td { padding: 1rem; border-bottom: 1px solid #f1f5f9; }
+    .table-row:hover { background: #273549; }
+    td { padding: 1rem; border-bottom: 1px solid #334155; color: #cbd5e1; }
     .client-info { display: flex; align-items: center; gap: 0.75rem; }
     .client-avatar {
       width: 40px; height: 40px; border-radius: 10px;
       background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
       color: white; display: flex; align-items: center; justify-content: center;
       font-weight: 600; font-size: 0.875rem; }
-    .client-info strong { display: block; color: #0f172a; }
-    .client-info small { color: #94a3b8; font-size: 0.8rem; }
+    .client-info strong { display: block; color: #f1f5f9; }
+    .client-info small { color: #64748b; font-size: 0.8rem; }
     .badge {
-      display: inline-block; padding: 0.25rem 0.75rem; background: #f1f5f9;
-      border-radius: 6px; font-size: 0.875rem; color: #475569; font-weight: 500; }
+      display: inline-block; padding: 0.25rem 0.75rem; background: #334155;
+      border-radius: 6px; font-size: 0.875rem; color: #94a3b8; font-weight: 500; }
     .actions { display: flex; gap: 0.5rem; }
     .btn-icon {
       width: 32px; height: 32px; border: none; border-radius: 8px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      background: #f1f5f9; color: #475569; transition: all 0.2s; }
-    .btn-icon:hover { background: #e2e8f0; transform: translateY(-1px); }
-    .btn-danger { background: #fee2e2; color: #dc2626; }
-    .btn-danger:hover { background: #fecaca; }
+      background: #334155; color: #94a3b8; transition: all 0.2s; }
+    .btn-icon:hover { background: #475569; color: #f1f5f9; transform: translateY(-1px); }
+    .btn-danger { background: rgba(220, 38, 38, 0.15); color: #f87171; }
+    .btn-danger:hover { background: rgba(220, 38, 38, 0.25); }
     .error-message {
-      margin-bottom: 1rem; padding: 0.75rem 1rem; background: #fee2e2;
-      color: #dc2626; border-radius: 8px; font-size: 0.875rem; }
+      margin-bottom: 1rem; padding: 0.75rem 1rem; background: rgba(220, 38, 38, 0.15);
+      color: #f87171; border-radius: 8px; font-size: 0.875rem; }
     .empty-state {
-      text-align: center; padding: 4rem 2rem; background: white; border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
+      text-align: center; padding: 4rem 2rem; background: #1e293b; border: 1px solid #334155;
+      border-radius: 16px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3); }
     .empty-state svg { margin-bottom: 1rem; }
-    .empty-state h3 { color: #334155; margin-bottom: 0.5rem; }
-    .empty-state p { color: #94a3b8; margin-bottom: 1.5rem; }
+    .empty-state h3 { color: #e2e8f0; margin-bottom: 0.5rem; }
+    .empty-state p { color: #64748b; margin-bottom: 1.5rem; }
+    .header-actions { display: flex; gap: 1rem; align-items: center; }
+    .btn-secondary {
+      padding: 0.75rem 1.5rem; background: #334155; color: #94a3b8;
+      border: none; border-radius: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .btn-secondary:hover { background: #475569; color: #f1f5f9; }
   `]
 })
 export class ClientListComponent implements OnInit {

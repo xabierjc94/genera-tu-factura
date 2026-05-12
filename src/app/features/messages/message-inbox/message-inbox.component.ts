@@ -93,27 +93,28 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
   styles: [`
     .page-container { max-width: 800px; margin: 0 auto; padding: 2rem; }
     .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; }
-    h1 { font-size: 2rem; margin: 0 0 0.5rem; color: #0f172a; }
-    .subtitle { color: #64748b; margin: 0; font-size: 0.95rem; }
+    h1 { font-size: 2rem; margin: 0 0 0.5rem; background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .subtitle { color: #94a3b8; margin: 0; font-size: 0.95rem; }
     .btn-secondary {
-      padding: 0.6rem 1.25rem; background: #f1f5f9; color: #475569;
+      padding: 0.6rem 1.25rem; background: #334155; color: #94a3b8;
       border: none; border-radius: 10px; font-weight: 500; cursor: pointer; transition: all 0.2s;
     }
-    .btn-secondary:hover { background: #e2e8f0; }
+    .btn-secondary:hover { background: #475569; color: #f1f5f9; }
     .empty-state {
-      text-align: center; padding: 4rem 2rem; background: white;
-      border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      text-align: center; padding: 4rem 2rem; background: #1e293b;
+      border: 1px solid #334155; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.3);
     }
     .empty-state svg { margin-bottom: 1rem; }
-    .empty-state h3 { color: #334155; margin-bottom: 0.5rem; }
-    .empty-state p { color: #94a3b8; margin: 0; }
+    .empty-state h3 { color: #e2e8f0; margin-bottom: 0.5rem; }
+    .empty-state p { color: #64748b; margin: 0; }
     .messages-list { display: flex; flex-direction: column; gap: 1rem; }
     .message-card {
-      background: white; border-radius: 16px; padding: 1.25rem 1.5rem;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06); cursor: pointer;
-      transition: all 0.2s; border-left: 4px solid transparent;
+      background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 1.25rem 1.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2); cursor: pointer;
+      transition: all 0.2s; border-left: 4px solid #334155;
     }
-    .message-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .message-card:hover { transform: translateY(-2px); border-color: #475569; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
     .message-card.unread { border-left-color: #6366f1; }
     .message-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
     .client-info { display: flex; align-items: center; gap: 0.75rem; }
@@ -124,42 +125,43 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
       font-weight: 700; font-size: 1rem; flex-shrink: 0;
     }
     .avatar.large { width: 48px; height: 48px; font-size: 1.25rem; }
-    .client-name { display: block; color: #0f172a; font-size: 0.95rem; }
-    .client-email { display: block; color: #94a3b8; font-size: 0.8rem; }
+    .client-name { display: block; color: #f1f5f9; font-size: 0.95rem; }
+    .client-email { display: block; color: #64748b; font-size: 0.8rem; }
     .meta { display: flex; align-items: center; gap: 0.75rem; }
-    .unread-dot { width: 8px; height: 8px; border-radius: 50%; background: #6366f1; flex-shrink: 0; }
-    .date { color: #94a3b8; font-size: 0.8rem; }
+    .unread-dot { width: 8px; height: 8px; border-radius: 50%; background: #818cf8; flex-shrink: 0; }
+    .date { color: #64748b; font-size: 0.8rem; }
     .btn-delete {
       width: 30px; height: 30px; border: none; border-radius: 8px;
-      background: #fee2e2; color: #dc2626; cursor: pointer;
+      background: rgba(220,38,38,0.15); color: #f87171; cursor: pointer;
       display: flex; align-items: center; justify-content: center; transition: all 0.2s;
     }
-    .btn-delete:hover { background: #fecaca; }
+    .btn-delete:hover { background: rgba(220,38,38,0.25); }
     .message-preview {
-      color: #64748b; font-size: 0.9rem; margin: 0 0 0.5rem;
+      color: #94a3b8; font-size: 0.9rem; margin: 0 0 0.5rem;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .invoice-ref { font-size: 0.75rem; color: #94a3b8; }
+    .invoice-ref { font-size: 0.75rem; color: #64748b; }
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
       display: flex; align-items: center; justify-content: center;
       z-index: 1000; padding: 1rem;
     }
     .modal {
-      background: white; border-radius: 20px; padding: 2rem;
-      width: 100%; max-width: 520px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      background: #1e293b; border: 1px solid #334155; border-radius: 20px; padding: 2rem;
+      width: 100%; max-width: 520px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-    .email-link { display: block; color: #6366f1; font-size: 0.85rem; text-decoration: none; }
-    .email-link:hover { text-decoration: underline; }
+    .email-link { display: block; color: #818cf8; font-size: 0.85rem; text-decoration: none; }
+    .email-link:hover { color: #a5b4fc; text-decoration: underline; }
     .btn-close {
       width: 32px; height: 32px; border: none; border-radius: 8px;
-      background: #f1f5f9; color: #475569; cursor: pointer; font-size: 1rem;
+      background: #334155; color: #94a3b8; cursor: pointer; font-size: 1rem;
     }
-    .modal-date { color: #94a3b8; font-size: 0.85rem; margin-bottom: 1rem; }
+    .btn-close:hover { background: #475569; color: #f1f5f9; }
+    .modal-date { color: #64748b; font-size: 0.85rem; margin-bottom: 1rem; }
     .modal-content {
-      background: #f8fafc; border-radius: 12px; padding: 1.25rem;
-      color: #334155; line-height: 1.6; white-space: pre-wrap; margin-bottom: 1.5rem;
+      background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 1.25rem;
+      color: #cbd5e1; line-height: 1.6; white-space: pre-wrap; margin-bottom: 1.5rem;
     }
     .modal-actions { display: flex; gap: 1rem; }
     .btn-reply {

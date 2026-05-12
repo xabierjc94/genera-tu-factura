@@ -84,10 +84,11 @@ import { MessageService } from '../../../core/services/message.service';
     }
     .card-wrapper { position: relative; z-index: 1; width: 100%; max-width: 480px; }
     .card {
-      background: rgba(255,255,255,0.97);
+      background: rgba(30, 41, 59, 0.97);
+      border: 1px solid #334155;
       border-radius: 24px;
       padding: 2.5rem;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     }
     .brand { text-align: center; margin-bottom: 2rem; }
     .logo-icon {
@@ -98,25 +99,26 @@ import { MessageService } from '../../../core/services/message.service';
       margin: 0 auto 1rem;
       box-shadow: 0 8px 24px rgba(99,102,241,0.4);
     }
-    h1 { font-size: 1.75rem; font-weight: 700; color: #0f172a; margin: 0 0 0.5rem; }
+    h1 { font-size: 1.75rem; font-weight: 700; color: #f1f5f9; margin: 0 0 0.5rem; }
     .gradient-text {
       background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .subtitle { color: #64748b; font-size: 0.9rem; margin: 0; }
+    .subtitle { color: #94a3b8; font-size: 0.9rem; margin: 0; }
     .form-group { margin-bottom: 1.25rem; }
-    label { display: block; margin-bottom: 0.5rem; color: #334155; font-weight: 500; font-size: 0.875rem; }
+    label { display: block; margin-bottom: 0.5rem; color: #94a3b8; font-weight: 500; font-size: 0.875rem; }
     input, textarea {
       width: 100%; padding: 0.875rem 1rem;
-      border: 2px solid #e2e8f0; border-radius: 12px;
+      border: 2px solid #334155; border-radius: 12px;
       font-size: 1rem; transition: all 0.2s;
-      box-sizing: border-box; background: #f8fafc;
+      box-sizing: border-box; background: #0f172a; color: #f1f5f9;
       font-family: inherit;
     }
+    input::placeholder, textarea::placeholder { color: #475569; }
     textarea { resize: vertical; }
     input:focus, textarea:focus {
-      border-color: #6366f1; background: white;
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.1); outline: none;
+      border-color: #6366f1; background: #0f172a;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.15); outline: none;
     }
     .btn-send {
       width: 100%; padding: 1rem;
@@ -133,13 +135,13 @@ import { MessageService } from '../../../core/services/message.service';
       border-radius: 50%; animation: spin 0.6s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .error { margin-top: 1rem; padding: 0.75rem 1rem; background: #fee2e2; color: #dc2626; border-radius: 8px; font-size: 0.875rem; }
+    .error { margin-top: 1rem; padding: 0.75rem 1rem; background: rgba(220,38,38,0.15); color: #f87171; border-radius: 8px; font-size: 0.875rem; }
     .loading-state { text-align: center; color: #64748b; padding: 2rem 0; }
     .success-card, .error-card { text-align: center; }
     .success-icon { margin-bottom: 1rem; }
-    .success-card h2 { color: #10b981; margin: 0 0 0.75rem; }
-    .success-card p, .error-card p { color: #64748b; margin: 0; }
-    .error-card h2 { color: #dc2626; margin: 0 0 0.75rem; }
+    .success-card h2 { color: #34d399; margin: 0 0 0.75rem; }
+    .success-card p, .error-card p { color: #94a3b8; margin: 0; }
+    .error-card h2 { color: #f87171; margin: 0 0 0.75rem; }
   `]
 })
 export class MessageFormComponent implements OnInit {

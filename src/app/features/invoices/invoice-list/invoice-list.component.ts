@@ -165,41 +165,40 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
     .page-header {
       display: flex; justify-content: space-between; align-items: flex-start;
       margin-bottom: 2rem; }
-    .header-actions {
-      display: flex; gap: 1rem; align-items: center;
-    }
-    h1 { font-size: 2rem; margin:0 0 0.5rem; color: #0f172a; }
-    .subtitle { color: #64748b; margin:0; font-size: 0.95rem; }
+    .header-actions { display: flex; gap: 1rem; align-items: center; }
+    h1 { font-size: 2rem; margin:0 0 0.5rem; background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .subtitle { color: #94a3b8; margin:0; font-size: 0.95rem; }
     .btn-primary {
       display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem;
       background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%); color: white;
       border: none; border-radius: 12px; font-weight: 500; cursor: pointer;
       transition: all 0.3s; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4); }
-    .filters {
-      display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+    .filters { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
     .search-box {
       display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem;
-      background: white; border: 2px solid #e2e8f0; border-radius: 12px;
+      background: #1e293b; border: 2px solid #334155; border-radius: 12px;
       flex: 1; max-width: 400px; transition: all 0.2s; }
-    .search-box:focus-within { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
-    .search-box svg { color: #94a3b8; flex-shrink: 0; }
-    .search-box input { border: none; outline: none; background: transparent; width: 100%; font-size: 0.95rem; }
+    .search-box:focus-within { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); }
+    .search-box svg { color: #64748b; flex-shrink: 0; }
+    .search-box input { border: none; outline: none; background: transparent; width: 100%; font-size: 0.95rem; color: #f1f5f9; }
+    .search-box input::placeholder { color: #64748b; }
     select {
-      padding: 0.75rem 1rem; border: 2px solid #e2e8f0; border-radius: 12px;
-      font-size: 0.95rem; background: white; cursor: pointer; outline: none;
-      transition: all 0.2s; }
+      padding: 0.75rem 1rem; border: 2px solid #334155; border-radius: 12px;
+      font-size: 0.95rem; background: #1e293b; color: #f1f5f9; cursor: pointer; outline: none; transition: all 0.2s; }
     select:focus { border-color: #6366f1; }
     .table-container {
-      background: white; border-radius: 16px; overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
+      background: #1e293b; border: 1px solid #334155; border-radius: 16px; overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3); }
     table { width:100%; border-collapse: collapse; }
     th {
-      background: #f8fafc; padding: 1rem; text-align: left; font-weight: 600;
-      color: #475569; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; }
+      background: #141d2e; padding: 1rem; text-align: left; font-weight: 600;
+      color: #64748b; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; }
     .table-row { transition: background 0.2s; }
-    .table-row:hover { background: #f8fafc; }
-    td { padding: 1rem; border-bottom: 1px solid #f1f5f9; }
+    .table-row:hover { background: #273549; }
+    td { padding: 1rem; border-bottom: 1px solid #334155; color: #cbd5e1; }
+    td strong { color: #f1f5f9; }
     .client-info { display: flex; align-items: center; gap: 0.75rem; }
     .client-avatar {
       width: 32px; height: 32px; border-radius: 8px;
@@ -209,55 +208,55 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
     .status {
       display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px;
       font-size: 0.8rem; font-weight: 500; }
-    .draft { background: #fef3c7; color: #92400e; }
-    .issued { background: #dbeafe; color: #1e40af; }
-    .paid { background: #d1fae5; color: #065f46; }
-    .cancelled { background: #fee2e2; color: #991b1b; }
+    .draft { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .issued { background: rgba(99,102,241,0.15); color: #818cf8; }
+    .paid { background: rgba(16,185,129,0.15); color: #34d399; }
+    .cancelled { background: rgba(220,38,38,0.15); color: #f87171; }
     .actions { display: flex; gap: 0.5rem; }
     .btn-icon {
       width: 32px; height: 32px; border: none; border-radius: 8px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      background: #f1f5f9; color: #475569; transition: all 0.2s; }
-    .btn-icon:hover { background: #e2e8f0; transform: translateY(-1px); }
-    .btn-danger { background: #fee2e2; color: #dc2626; }
-    .btn-danger:hover { background: #fecaca; }
+      background: #334155; color: #94a3b8; transition: all 0.2s; }
+    .btn-icon:hover { background: #475569; color: #f1f5f9; transform: translateY(-1px); }
+    .btn-danger { background: rgba(220, 38, 38, 0.15); color: #f87171; }
+    .btn-danger:hover { background: rgba(220, 38, 38, 0.25); }
     .empty-state {
-      text-align: center; padding: 4rem 2rem; background: white; border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
+      text-align: center; padding: 4rem 2rem; background: #1e293b; border: 1px solid #334155;
+      border-radius: 16px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3); }
     .empty-state svg { margin-bottom: 1rem; }
-    .empty-state h3 { color: #334155; margin-bottom: 0.5rem; }
-    .empty-state p { color: #94a3b8; margin-bottom: 1.5rem; }
+    .empty-state h3 { color: #e2e8f0; margin-bottom: 0.5rem; }
+    .empty-state p { color: #64748b; margin-bottom: 1.5rem; }
     .preview-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
       z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem; }
     .preview-modal {
-      background: white; border-radius: 16px; width: 100%; max-width: 860px;
+      background: #1e293b; border: 1px solid #334155; border-radius: 16px; width: 100%; max-width: 860px;
       height: 90vh; display: flex; flex-direction: column;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.3); overflow: hidden; }
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5); overflow: hidden; }
     .preview-header {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 1.25rem; border-bottom: 1px solid #e2e8f0; background: #f8fafc; flex-shrink: 0; }
-    .preview-title { font-weight: 600; color: #0f172a; font-size: 0.95rem; }
+      padding: 1rem 1.25rem; border-bottom: 1px solid #334155; background: #141d2e; flex-shrink: 0; }
+    .preview-title { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; }
     .preview-actions { display: flex; align-items: center; gap: 0.75rem; }
     .preview-close {
       width: 36px; height: 36px; border: none; border-radius: 8px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      background: #fee2e2; color: #dc2626; transition: all 0.2s; }
-    .preview-close:hover { background: #fecaca; }
+      background: rgba(220,38,38,0.15); color: #f87171; transition: all 0.2s; }
+    .preview-close:hover { background: rgba(220,38,38,0.25); }
     .preview-body { flex: 1; overflow: hidden; position: relative; }
     .preview-iframe { width: 100%; height: 100%; border: none; display: block; }
     .preview-loading {
       position: absolute; inset: 0; display: flex; flex-direction: column;
       align-items: center; justify-content: center; gap: 1rem; color: #64748b; }
     .spinner {
-      width: 40px; height: 40px; border: 3px solid #e2e8f0;
+      width: 40px; height: 40px; border: 3px solid #334155;
       border-top-color: #6366f1; border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .btn-secondary {
       display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
-      background: white; border: 1.5px solid #e2e8f0; border-radius: 8px;
-      font-size: 0.875rem; font-weight: 500; color: #475569; cursor: pointer; transition: all 0.2s; }
-    .btn-secondary:hover { border-color: #6366f1; color: #6366f1; }
+      background: #334155; border: none; border-radius: 8px;
+      font-size: 0.875rem; font-weight: 500; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
+    .btn-secondary:hover { background: #475569; color: #f1f5f9; }
     .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
   `]
 })

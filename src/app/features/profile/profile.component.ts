@@ -111,11 +111,11 @@ import { Profile } from '../../shared/models/user.model';
     .page-header {
       display: flex; justify-content: space-between; align-items: flex-start;
       margin-bottom: 2rem; }
-    h1 { font-size: 2rem; margin:0 0 0.5rem; color: #0f172a; }
+    h1 { font-size: 2rem; margin:0 0 0.5rem; color: #f1f5f9; }
     .gradient-text {
       background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .subtitle { color: #64748b; margin:0; font-size: 0.95rem; }
+    .subtitle { color: #94a3b8; margin:0; font-size: 0.95rem; }
     .btn-primary {
       display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem;
       background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%); color: white;
@@ -124,20 +124,20 @@ import { Profile } from '../../shared/models/user.model';
     .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4); }
     .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
     .btn-secondary {
-      padding: 0.75rem 1.5rem; background: #f1f5f9; color: #475569;
+      padding: 0.75rem 1.5rem; background: #334155; color: #94a3b8;
       border: none; border-radius: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
-    .btn-secondary:hover { background: #e2e8f0; }
+    .btn-secondary:hover { background: #475569; color: #f1f5f9; }
     .form-card {
-      background: white; border-radius: 16px; padding: 2rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
+      background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 2rem;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3); }
     .profile-header {
       display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; padding-bottom: 2rem;
-      border-bottom: 2px solid #f1f5f9; }
+      border-bottom: 2px solid #334155; }
     .profile-logo-container {
       display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
     .profile-logo {
       width: 100px; height: 100px; border-radius: 20px; object-fit: cover;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
     .profile-avatar {
       width: 100px; height: 100px; border-radius: 20px;
       background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
@@ -146,26 +146,27 @@ import { Profile } from '../../shared/models/user.model';
       box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4); }
     .logo-upload-btn {
       display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
-      background: #eef2ff; color: #6366f1; border-radius: 8px; cursor: pointer;
+      background: rgba(99,102,241,0.15); color: #818cf8; border-radius: 8px; cursor: pointer;
       font-size: 0.875rem; font-weight: 500; transition: all 0.2s; }
-    .logo-upload-btn:hover { background: #e0e7ff; }
+    .logo-upload-btn:hover { background: rgba(99,102,241,0.25); }
     .hidden { display: none; }
-    .profile-header h2 { margin: 0 0 0.25rem; color: #0f172a; }
-    .profile-header p { margin: 0; color: #94a3b8; font-size: 0.9rem; }
+    .profile-header h2 { margin: 0 0 0.25rem; color: #f1f5f9; }
+    .profile-header p { margin: 0; color: #64748b; font-size: 0.9rem; }
     .form-section { margin-bottom: 2rem; }
-    .form-section h3 { margin: 0 0 1rem; color: #334155; font-size: 1rem; font-weight: 600; }
+    .form-section h3 { margin: 0 0 1rem; color: #94a3b8; font-size: 1rem; font-weight: 600; }
     .form-grid {
       display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
     .full-width { grid-column: 1 / -1; }
     .form-group { display: flex; flex-direction: column; }
-    label { display: block; margin-bottom: 0.5rem; color: #334155; font-weight: 500; font-size: 0.875rem; }
+    label { display: block; margin-bottom: 0.5rem; color: #94a3b8; font-weight: 500; font-size: 0.875rem; }
     input {
-      width: 100%; padding: 0.875rem 1rem; border: 2px solid #e2e8f0;
+      width: 100%; padding: 0.875rem 1rem; border: 2px solid #334155;
       border-radius: 12px; font-size: 1rem; transition: all 0.2s; box-sizing: border-box;
-      background: #f8fafc; }
-    input:focus { border-color: #6366f1; background: white; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
-    input:disabled { background: #e2e8f0; cursor: not-allowed; }
-    small { margin-top: 0.25rem; color: #94a3b8; font-size: 0.8rem; }
+      background: #0f172a; color: #f1f5f9; }
+    input::placeholder { color: #475569; }
+    input:focus { border-color: #6366f1; background: #0f172a; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); }
+    input:disabled { background: #1e293b; color: #475569; cursor: not-allowed; }
+    small { margin-top: 0.25rem; color: #64748b; font-size: 0.8rem; }
     .form-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem; }
     .spinner {
       display: inline-block; width: 20px; height: 20px;
@@ -173,10 +174,10 @@ import { Profile } from '../../shared/models/user.model';
       border-radius: 50%; animation: spin 0.6s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .success-message {
-      margin-top: 1rem; padding: 0.75rem 1rem; background: #d1fae5; color: #065f46;
+      margin-top: 1rem; padding: 0.75rem 1rem; background: rgba(16,185,129,0.15); color: #34d399;
       border-radius: 8px; font-size: 0.875rem; text-align: center; }
     .error-message {
-      margin-top: 1rem; padding: 0.75rem 1rem; background: #fee2e2; color: #dc2626;
+      margin-top: 1rem; padding: 0.75rem 1rem; background: rgba(220,38,38,0.15); color: #f87171;
       border-radius: 8px; font-size: 0.875rem; text-align: center; }
   `]
 })

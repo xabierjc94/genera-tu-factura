@@ -170,11 +170,12 @@ import { AuthService } from '../../../core/services/auth.service';
     }
 
     .register-card {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(30, 41, 59, 0.97);
       backdrop-filter: blur(20px);
+      border: 1px solid #334155;
       border-radius: 24px;
       padding: 2.5rem;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     }
 
     .brand {
@@ -205,7 +206,7 @@ import { AuthService } from '../../../core/services/auth.service';
     h1 {
       font-size: 2rem;
       font-weight: 700;
-      color: #0f172a;
+      color: #f1f5f9;
       margin: 0;
       line-height: 1.2;
     }
@@ -219,7 +220,7 @@ import { AuthService } from '../../../core/services/auth.service';
 
     .tagline {
       margin-top: 0.5rem;
-      color: #64748b;
+      color: #94a3b8;
       font-size: 0.95rem;
     }
 
@@ -229,7 +230,7 @@ import { AuthService } from '../../../core/services/auth.service';
 
     .form-section h3 {
       margin: 0 0 1rem;
-      color: #475569;
+      color: #94a3b8;
       font-size: 1rem;
       font-weight: 600;
     }
@@ -241,7 +242,7 @@ import { AuthService } from '../../../core/services/auth.service';
     label {
       display: block;
       margin-bottom: 0.5rem;
-      color: #334155;
+      color: #94a3b8;
       font-weight: 500;
       font-size: 0.875rem;
     }
@@ -261,18 +262,21 @@ import { AuthService } from '../../../core/services/auth.service';
     input {
       width: 100%;
       padding: 0.875rem 1rem 0.875rem 3rem;
-      border: 2px solid #e2e8f0;
+      border: 2px solid #334155;
       border-radius: 12px;
       font-size: 1rem;
       transition: all 0.2s;
       box-sizing: border-box;
-      background: #f8fafc;
+      background: #0f172a;
+      color: #f1f5f9;
     }
+
+    input::placeholder { color: #475569; }
 
     input:focus {
       border-color: #6366f1;
-      background: white;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      background: #0f172a;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
     }
 
     .toggle-password {
@@ -341,8 +345,8 @@ import { AuthService } from '../../../core/services/auth.service';
     .error-message {
       margin-top: 1rem;
       padding: 0.75rem 1rem;
-      background: #fee2e2;
-      color: #dc2626;
+      background: rgba(220, 38, 38, 0.15);
+      color: #f87171;
       border-radius: 8px;
       font-size: 0.875rem;
       text-align: center;
@@ -356,12 +360,13 @@ import { AuthService } from '../../../core/services/auth.service';
     }
 
     .footer a {
-      color: #6366f1;
+      color: #818cf8;
       font-weight: 600;
       text-decoration: none;
     }
 
     .footer a:hover {
+      color: #a5b4fc;
       text-decoration: underline;
     }
 
@@ -369,8 +374,8 @@ import { AuthService } from '../../../core/services/auth.service';
       display: block;
       width: 100%;
       padding: 0.75rem 1.5rem;
-      background: #f1f5f9;
-      color: #475569;
+      background: #334155;
+      color: #94a3b8;
       border: none;
       border-radius: 12px;
       font-weight: 500;
@@ -380,7 +385,8 @@ import { AuthService } from '../../../core/services/auth.service';
     }
 
     .btn-back:hover {
-      background: #e2e8f0;
+      background: #475569;
+      color: #f1f5f9;
     }
   `]
 })

@@ -179,11 +179,11 @@ import { Client } from '../../../shared/models/client.model';
     .page-header {
       display: flex; justify-content: space-between; align-items: flex-start;
       margin-bottom: 2rem; }
-    h1 { font-size: 2rem; margin:0 0 0.5rem; color: #0f172a; }
+    h1 { font-size: 2rem; margin:0 0 0.5rem; color: #f1f5f9; }
     .gradient-text {
       background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .subtitle { color: #64748b; margin:0; font-size: 0.95rem; }
+    .subtitle { color: #94a3b8; margin:0; font-size: 0.95rem; }
     .btn-primary {
       display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem;
       background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%); color: white;
@@ -192,56 +192,59 @@ import { Client } from '../../../shared/models/client.model';
     .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4); }
     .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
     .btn-secondary {
-      padding: 0.75rem 1.5rem; background: #f1f5f9; color: #475569;
+      padding: 0.75rem 1.5rem; background: #334155; color: #94a3b8;
       border: none; border-radius: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
-    .btn-secondary:hover { background: #e2e8f0; }
+    .btn-secondary:hover { background: #475569; color: #f1f5f9; }
     .form-card {
-      background: white; border-radius: 16px; padding: 2rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
+      background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 2rem;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3); }
     .form-section { margin-bottom: 2rem; }
     .section-header {
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 1rem; }
-    .section-header h3 { margin: 0; color: #334155; font-size: 1rem; }
+    .section-header h3 { margin: 0; color: #94a3b8; font-size: 1rem; }
     .btn-add {
       display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
-      background: #eef2ff; color: #6366f1; border: none; border-radius: 8px;
+      background: rgba(99,102,241,0.15); color: #818cf8; border: none; border-radius: 8px;
       font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
-    .btn-add:hover { background: #e0e7ff; }
+    .btn-add:hover { background: rgba(99,102,241,0.25); }
     .btn-toggle {
       display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
-      background: #f1f5f9; color: #64748b; border: none; border-radius: 8px;
+      background: #334155; color: #94a3b8; border: none; border-radius: 8px;
       font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
-    .btn-toggle:hover { background: #e2e8f0; }
+    .btn-toggle:hover { background: #475569; color: #f1f5f9; }
     .form-grid {
       display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
     .form-group { display: flex; flex-direction: column; }
     .form-group.full-width { grid-column: 1 / -1; }
-    small { margin-top: 0.25rem; color: #94a3b8; font-size: 0.8rem; }
-    label { display: block; margin-bottom: 0.5rem; color: #334155; font-weight: 500; font-size: 0.875rem; }
+    small { margin-top: 0.25rem; color: #64748b; font-size: 0.8rem; }
+    label { display: block; margin-bottom: 0.5rem; color: #94a3b8; font-weight: 500; font-size: 0.875rem; }
     input, select {
-      width: 100%; padding: 0.875rem 1rem; border: 2px solid #e2e8f0;
+      width: 100%; padding: 0.875rem 1rem; border: 2px solid #334155;
       border-radius: 12px; font-size: 1rem; transition: all 0.2s; box-sizing: border-box;
-      background: #f8fafc; }
+      background: #0f172a; color: #f1f5f9; }
+    input::placeholder { color: #475569; }
     input:focus, select:focus {
-      border-color: #6366f1; background: white; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+      border-color: #6366f1; background: #0f172a; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); outline: none; }
     select { cursor: pointer; }
+    select option { background: #1e293b; color: #f1f5f9; }
     .item-row {
       display: grid; grid-template-columns: 3fr 1fr 1fr 1fr auto; gap: 1rem;
-      margin-bottom: 1rem; padding: 1rem; background: #f8fafc; border-radius: 12px; }
+      margin-bottom: 1rem; padding: 1rem; background: #0f172a; border: 1px solid #334155; border-radius: 12px; }
     .item-row label { font-size: 0.8rem; }
     .btn-remove {
-      width: 32px; height: 32px; align-self: flex-end; background: #fee2e2; color: #dc2626;
+      width: 32px; height: 32px; align-self: flex-end; background: rgba(220,38,38,0.15); color: #f87171;
       border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s;
       display: flex; align-items: center; justify-content: center; }
-    .btn-remove:hover { background: #fecaca; }
+    .btn-remove:hover { background: rgba(220,38,38,0.25); }
     .totals-card {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;
-      padding: 1.5rem 2rem; border-radius: 12px; margin: 2rem 0; }
+      background: linear-gradient(135deg, #312e81 0%, #4c1d95 100%); color: white;
+      padding: 1.5rem 2rem; border-radius: 12px; margin: 2rem 0;
+      border: 1px solid rgba(99,102,241,0.3); }
     .total-row {
       display: flex; justify-content: space-between; padding: 0.5rem 0;
       font-size: 0.95rem; }
-    .total-final { font-size: 1.25rem; font-weight: bold; border-top: 2px solid rgba(255,255,255,0.3); padding-top: 1rem; }
+    .total-final { font-size: 1.25rem; font-weight: bold; border-top: 2px solid rgba(255,255,255,0.2); padding-top: 1rem; }
     .form-actions { display: flex; gap: 1rem; justify-content: flex-end; }
     .spinner {
       display: inline-block; width: 20px; height: 20px;
@@ -249,11 +252,11 @@ import { Client } from '../../../shared/models/client.model';
       border-radius: 50%; animation: spin 0.6s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .error-message {
-      margin-top: 1rem; padding: 0.75rem 1rem; background: #fee2e2;
-      color: #dc2626; border-radius: 8px; font-size: 0.875rem; text-align: center; }
+      margin-top: 1rem; padding: 0.75rem 1rem; background: rgba(220,38,38,0.15);
+      color: #f87171; border-radius: 8px; font-size: 0.875rem; text-align: center; }
     .warn-message {
-      margin-top: 1rem; padding: 0.75rem 1rem; background: #fef3c7;
-      color: #92400e; border-radius: 8px; font-size: 0.875rem; text-align: center; }
+      margin-top: 1rem; padding: 0.75rem 1rem; background: rgba(245,158,11,0.15);
+      color: #fbbf24; border-radius: 8px; font-size: 0.875rem; text-align: center; }
   `]
 })
 export class InvoiceFormComponent implements OnInit {
