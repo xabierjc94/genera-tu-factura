@@ -266,6 +266,20 @@ import { Profile } from '../../shared/models/user.model';
       justify-content: center;
       border: 2px solid #1e293b;
     }
+
+    @media (max-width: 768px) {
+      .welcome-section h2 { font-size: 1.5rem; }
+      .welcome-section p { font-size: 0.95rem; }
+      .stats-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+      .stat-number { font-size: 1.5rem; }
+      .stat-card { padding: 1.25rem; }
+    }
+
+    @media (max-width: 480px) {
+      .welcome-section h2 { font-size: 1.3rem; }
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+      .actions-grid { grid-template-columns: 1fr; }
+    }
   `]
 })
 export class DashboardComponent implements OnInit {

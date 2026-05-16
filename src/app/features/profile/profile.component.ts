@@ -179,6 +179,23 @@ import { Profile } from '../../shared/models/user.model';
     .error-message {
       margin-top: 1rem; padding: 0.75rem 1rem; background: rgba(220,38,38,0.15); color: #f87171;
       border-radius: 8px; font-size: 0.875rem; text-align: center; }
+
+    @media (max-width: 768px) {
+      .page-container { padding: 1.25rem 1rem; }
+      h1 { font-size: 1.5rem; }
+      .page-header { flex-wrap: wrap; gap: 1rem; }
+      .form-card { padding: 1.25rem; }
+      .profile-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .form-grid { grid-template-columns: 1fr; gap: 1rem; }
+    }
+
+    @media (max-width: 480px) {
+      .page-container { padding: 1rem 0.75rem; }
+      .form-card { padding: 1rem; }
+      .form-actions { flex-direction: column; }
+      .btn-primary { width: 100%; justify-content: center; }
+      .btn-secondary { width: 100%; text-align: center; }
+    }
   `]
 })
 export class ProfileComponent implements OnInit {

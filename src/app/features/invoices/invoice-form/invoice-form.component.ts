@@ -257,6 +257,36 @@ import { Client } from '../../../shared/models/client.model';
     .warn-message {
       margin-top: 1rem; padding: 0.75rem 1rem; background: rgba(245,158,11,0.15);
       color: #fbbf24; border-radius: 8px; font-size: 0.875rem; text-align: center; }
+
+    @media (max-width: 768px) {
+      .page-container { padding: 1.25rem 1rem; }
+      h1 { font-size: 1.5rem; }
+      .page-header { flex-wrap: wrap; gap: 1rem; }
+      .form-card { padding: 1.25rem; }
+      .form-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .item-row {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+          "desc desc"
+          "qty price"
+          "total remove";
+        gap: 0.75rem;
+      }
+      .item-desc { grid-area: desc; }
+      .item-qty { grid-area: qty; }
+      .item-price { grid-area: price; }
+      .item-total { grid-area: total; }
+      .btn-remove { grid-area: remove; align-self: flex-end; width: 100%; border-radius: 8px; }
+      .totals-card { padding: 1rem 1.25rem; }
+    }
+
+    @media (max-width: 480px) {
+      .page-container { padding: 1rem 0.75rem; }
+      .form-card { padding: 1rem; }
+      .form-actions { flex-direction: column; }
+      .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+      .section-header { flex-wrap: wrap; gap: 0.5rem; }
+    }
   `]
 })
 export class InvoiceFormComponent implements OnInit {

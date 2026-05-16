@@ -135,7 +135,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
     .search-box input { border: none; outline: none; background: transparent; width: 100%; font-size: 0.95rem; color: #f1f5f9; }
     .search-box input::placeholder { color: #64748b; }
     .table-container {
-      background: #1e293b; border: 1px solid #334155; border-radius: 16px; overflow: hidden;
+      background: #1e293b; border: 1px solid #334155; border-radius: 16px; overflow-x: auto;
       box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3); }
     table { width: 100%; border-collapse: collapse; }
     th {
@@ -177,6 +177,21 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
       padding: 0.75rem 1.5rem; background: #334155; color: #94a3b8;
       border: none; border-radius: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
     .btn-secondary:hover { background: #475569; color: #f1f5f9; }
+
+    @media (max-width: 768px) {
+      .page-container { padding: 1.25rem 1rem; }
+      h1 { font-size: 1.5rem; }
+      .page-header { flex-wrap: wrap; gap: 1rem; }
+      .header-actions { flex-wrap: wrap; }
+      .search-box { max-width: none; }
+      table { min-width: 480px; }
+    }
+
+    @media (max-width: 480px) {
+      .page-container { padding: 1rem 0.75rem; }
+      h1 { font-size: 1.3rem; }
+      .btn-primary, .btn-secondary { padding: 0.6rem 1rem; font-size: 0.875rem; }
+    }
   `]
 })
 export class ClientListComponent implements OnInit {

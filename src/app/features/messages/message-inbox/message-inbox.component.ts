@@ -172,6 +172,24 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
       display: inline-flex; align-items: center;
     }
     .btn-reply:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(99,102,241,0.4); }
+
+    @media (max-width: 768px) {
+      .page-container { padding: 1.25rem 1rem; }
+      h1 { font-size: 1.5rem; }
+      .page-header { flex-wrap: wrap; gap: 1rem; }
+      .message-header { flex-wrap: wrap; gap: 0.5rem; }
+      .meta { flex-wrap: wrap; }
+      .modal { padding: 1.25rem; border-radius: 16px; }
+      .modal-actions { flex-wrap: wrap; }
+      .btn-reply { flex: 1; justify-content: center; }
+    }
+
+    @media (max-width: 480px) {
+      .page-container { padding: 1rem 0.75rem; }
+      .modal { padding: 1rem; }
+      .modal-actions { flex-direction: column; }
+      .btn-reply, .btn-secondary { width: 100%; text-align: center; justify-content: center; }
+    }
   `]
 })
 export class MessageInboxComponent implements OnInit {

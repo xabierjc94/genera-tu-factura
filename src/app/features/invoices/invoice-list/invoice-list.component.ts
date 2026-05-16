@@ -189,7 +189,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
       font-size: 0.95rem; background: #1e293b; color: #f1f5f9; cursor: pointer; outline: none; transition: all 0.2s; }
     select:focus { border-color: #6366f1; }
     .table-container {
-      background: #1e293b; border: 1px solid #334155; border-radius: 16px; overflow: hidden;
+      background: #1e293b; border: 1px solid #334155; border-radius: 16px; overflow-x: auto;
       box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3); }
     table { width:100%; border-collapse: collapse; }
     th {
@@ -258,6 +258,24 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
       font-size: 0.875rem; font-weight: 500; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
     .btn-secondary:hover { background: #475569; color: #f1f5f9; }
     .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    @media (max-width: 768px) {
+      .page-container { padding: 1.25rem 1rem; }
+      h1 { font-size: 1.5rem; }
+      .page-header { flex-wrap: wrap; gap: 1rem; }
+      .header-actions { flex-wrap: wrap; }
+      .filters { flex-wrap: wrap; }
+      .search-box { max-width: none; flex: 1 1 200px; }
+      select { flex: 1 1 140px; }
+      table { min-width: 560px; }
+      .preview-modal { height: 85vh; }
+    }
+
+    @media (max-width: 480px) {
+      .page-container { padding: 1rem 0.75rem; }
+      h1 { font-size: 1.3rem; }
+      .btn-primary, .btn-secondary { padding: 0.6rem 1rem; font-size: 0.875rem; }
+    }
   `]
 })
 export class InvoiceListComponent implements OnInit {
