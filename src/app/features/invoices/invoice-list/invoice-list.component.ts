@@ -292,6 +292,7 @@ export class InvoiceListComponent implements OnInit {
   previewUrl: SafeResourceUrl | null = null;
   previewInvoiceNumber = '';
   previewInvoiceRef: Invoice | null = null;
+  private blobUrl: string | null = null;
   statusLabels: any = {
     draft: 'Borrador',
     issued: 'Emitida',
@@ -374,20 +375,30 @@ export class InvoiceListComponent implements OnInit {
     this.previewVisible = true;
     this.previewLoading = true;
     this.previewUrl = null;
+    this.revokeBlobUrl();
     this.previewInvoiceNumber = `Factura ${invoice.invoice_number}`;
     this.previewInvoiceRef = invoice;
     this.cdr.detectChanges();
     try {
-      const dataUri = await this.pdfService.getPreviewDataUri(invoice, this.profile);
-      this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(dataUri);
+      const url = await this.pdfService.getPreviewBlobUrl(invoice, this.profile);
+      this.blobUrl = url;
+      this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     } finally {
       this.previewLoading = false;
       this.cdr.detectChanges();
     }
   }
 
+  private revokeBlobUrl() {
+    if (this.blobUrl) {
+      URL.revokeObjectURL(this.blobUrl);
+      this.blobUrl = null;
+    }
+  }
+
   closePreview() {
     this.previewVisible = false;
+    this.revokeBlobUrl();
     this.previewUrl = null;
     this.previewInvoiceRef = null;
   }

@@ -189,8 +189,9 @@ export class PdfService {
     return doc.output('datauristring').split(',')[1];
   }
 
-  async getPreviewDataUri(invoice: Invoice, profile: Profile | null): Promise<string> {
+  async getPreviewBlobUrl(invoice: Invoice, profile: Profile | null): Promise<string> {
     const doc = await this.buildPdf(invoice, profile);
-    return doc.output('datauristring');
+    const blob = doc.output('blob');
+    return URL.createObjectURL(blob);
   }
 }
